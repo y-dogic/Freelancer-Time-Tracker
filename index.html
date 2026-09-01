@@ -268,14 +268,11 @@ async function ghRead(conf) {
   return { data: JSON.parse(b64decode(json.content)), sha: json.sha };
 }
 
-/* Read, merge, write back. One round trip each way, no lost writes. */
-async function ghSync(conf, localData) {
-  if (!conf.repo || !conf.token) throw new Error("Not configured");
-  const { data: remote, sha } = await ghRead(conf);
-  const merged = mergeData(localData, remote);
+/* Write a snapshot back. sha must come from the read that produced it. */
+async function ghWrite(conf, data, sha) {
   const body = {
     message: "ledger " + new Date().toISOString().slice(0, 16).replace("T", " "),
-    content: b64encode(JSON.stringify(merged, null, 2)),
+    content: b64encode(JSON.stringify(data, null, 2)),
   };
   if (sha) body.sha = sha;
   const res = await fetch(
@@ -290,7 +287,7 @@ async function ghSync(conf, localData) {
   if (res.status === 403)
     throw new Error("Write forbidden — token needs Contents: Read and write");
   if (!res.ok) throw new Error("Write failed (" + res.status + ")");
-  return merged;
+  return true;
 }
 
 /* Checks each link in the chain and reports the first thing that's wrong. */
@@ -371,18 +368,32 @@ function App() {
   useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(""), 3000); return () => clearTimeout(t); }, [toast]);
 
   /* ---- sync ---- */
+  /* rawRef always mirrors the newest state, so a sync that started before an
+     edit still writes the edit rather than an old snapshot. */
+  const rawRef = useRef(raw);
+  useEffect(() => { rawRef.current = raw; }, [raw]);
+  const syncing = useRef(false);
+
   const runSync = useCallback(async (silent) => {
     if (!conf.repo || !conf.token) { if (!silent) setToast("Set up GitHub first"); return; }
+    if (syncing.current) return;                 // one at a time
+    syncing.current = true;
     setSync(s => ({ ...s, busy: true, error: null }));
     try {
-      const merged = await ghSync(conf, JSON.parse(localStorage.getItem(DATA_KEY) || "{}"));
-      setRaw(merged);
+      const { data: remote, sha } = await ghRead(conf);
+      const merged = mergeData(rawRef.current, remote);
+      await ghWrite(conf, merged, sha);
+      /* Merge into whatever is current NOW — anything typed or imported while
+         the request was in flight is in `cur` and survives. */
+      setRaw(cur => mergeData(cur, merged));
       dirty.current = false;
       setSync({ busy: false, at: nowISO(), error: null });
       if (!silent) setToast("Synced");
     } catch (e) {
       setSync(s => ({ ...s, busy: false, error: e.message }));
       if (!silent) setToast(e.message);
+    } finally {
+      syncing.current = false;
     }
   }, [conf]);
 
@@ -476,7 +487,8 @@ function App() {
       const incoming = normalizeImport(JSON.parse(text));
       const counts = incoming.sessions.length + " sessions, " + incoming.items.length + " work items";
       setRaw(d => mergeData(d, incoming));
-      schedulePush();
+      dirty.current = true;
+      setTimeout(() => runSync(true), 600);
       setToast("Imported " + counts);
       return true;
     } catch (e) { setToast("That file didn't parse — is it the JSON, not the CSV?"); return false; }
