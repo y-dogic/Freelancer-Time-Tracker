@@ -1,7 +1,658 @@
 {
-  "clients": [],
-  "items": [],
-  "sessions": [],
+  "clients": [
+    {
+      "name": "Kenwin",
+      "source": "BNI referral",
+      "id": "lnv3q4fq",
+      "updatedAt": "2026-09-01T11:37:09.694Z"
+    },
+    {
+      "name": "Tri-L Picture",
+      "source": "Past client",
+      "id": "frfwkgdl",
+      "updatedAt": "2026-09-01T11:37:09.694Z"
+    },
+    {
+      "name": "Gamma Studio",
+      "source": "Past client",
+      "id": "e5pr2mx0",
+      "updatedAt": "2026-09-01T11:37:09.694Z"
+    },
+    {
+      "name": "Yellow Wong",
+      "source": "Other",
+      "id": "061ltrpr",
+      "updatedAt": "2026-09-01T11:37:09.694Z"
+    },
+    {
+      "id": "p0ln2yx8",
+      "name": "Ar Sang",
+      "source": "Personal network",
+      "updatedAt": "2026-09-01T11:37:09.694Z"
+    }
+  ],
+  "items": [
+    {
+      "name": "Beans MOKO LED Video",
+      "type": "paid",
+      "clientId": "lnv3q4fq",
+      "fee": "8000",
+      "bni": false,
+      "id": "awfoq2t9",
+      "createdAt": "2026-08-29T10:01:10.819Z",
+      "deliverables": [
+        {
+          "id": "b08vcmky",
+          "name": "3 LED wall video"
+        }
+      ],
+      "status": "active",
+      "updatedAt": "2026-08-29T10:01:10.819Z"
+    },
+    {
+      "name": "PNS (Taste) Yogurt IG Reel",
+      "type": "paid",
+      "clientId": "e5pr2mx0",
+      "fee": "",
+      "bni": false,
+      "id": "9riv2jvx",
+      "createdAt": "2026-08-29T10:07:13.783Z",
+      "deliverables": [
+        {
+          "id": "td57r4rm",
+          "name": "30s IG Reel"
+        }
+      ],
+      "status": "active",
+      "updatedAt": "2026-08-29T10:07:13.783Z"
+    },
+    {
+      "name": "Hactl HSCS Video",
+      "type": "paid",
+      "clientId": "frfwkgdl",
+      "fee": "",
+      "deliverables": [
+        {
+          "id": "f97s16yc",
+          "name": "30s Video"
+        }
+      ],
+      "bni": false,
+      "status": "active",
+      "id": "0mfdu7hq",
+      "createdAt": "2026-08-29T10:22:47.565Z",
+      "updatedAt": "2026-08-29T10:22:47.565Z"
+    },
+    {
+      "name": "HSTTA Video",
+      "type": "paid",
+      "clientId": "p0ln2yx8",
+      "fee": "10000",
+      "deliverables": [
+        {
+          "id": "jb1l5onn",
+          "name": "Location application and communication"
+        },
+        {
+          "id": "4tyovlwo",
+          "name": "Child Talent application to Labour Department"
+        }
+      ],
+      "bni": false,
+      "status": "active",
+      "id": "adpd7ns6",
+      "createdAt": "2026-08-29T12:44:01.565Z",
+      "updatedAt": "2026-08-29T12:44:01.565Z"
+    },
+    {
+      "name": "BNI",
+      "type": "relationship",
+      "clientId": "",
+      "fee": "",
+      "deliverables": [
+        {
+          "id": "06iyx90f",
+          "name": "Regular Meeiting"
+        },
+        {
+          "id": "bctjay28",
+          "name": "Other meeting/ Activity"
+        },
+        {
+          "id": "adkfgeth",
+          "name": "121"
+        }
+      ],
+      "bni": true,
+      "status": "active",
+      "id": "6hgl7men",
+      "createdAt": "2026-08-29T12:56:21.402Z",
+      "updatedAt": "2026-08-29T12:56:21.402Z"
+    },
+    {
+      "name": "HKIA Framework (20260826)",
+      "type": "pitch",
+      "clientId": "frfwkgdl",
+      "fee": "",
+      "deliverables": [
+        {
+          "id": "g995suck",
+          "name": "Framework submission"
+        }
+      ],
+      "bni": false,
+      "status": "active",
+      "id": "nly1s44p",
+      "createdAt": "2026-08-31T07:23:57.245Z",
+      "updatedAt": "2026-08-31T07:23:57.245Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "2zln2iu9",
+      "itemId": "awfoq2t9",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "b08vcmky",
+      "minutes": 120,
+      "date": "2026-08-28",
+      "intensity": 3,
+      "note": "chat with claude to understand video ratio and make a 3d preview for the video",
+      "loggedAt": "2026-08-29T12:22:14.067Z",
+      "updatedAt": "2026-08-29T12:22:14.067Z"
+    },
+    {
+      "id": "434yjh0i",
+      "itemId": "0mfdu7hq",
+      "phase": "Recce & casting",
+      "deliverableId": "f97s16yc",
+      "minutes": 240,
+      "date": "2026-07-17",
+      "intensity": 2,
+      "note": "sitevisit at Hactl",
+      "loggedAt": "2026-08-29T12:23:21.098Z",
+      "updatedAt": "2026-08-29T12:23:21.098Z"
+    },
+    {
+      "id": "jzojc654",
+      "itemId": "0mfdu7hq",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "f97s16yc",
+      "minutes": 240,
+      "date": "2026-07-25",
+      "intensity": 2,
+      "note": "made a storyboard deck for the video",
+      "loggedAt": "2026-08-29T12:23:58.195Z",
+      "updatedAt": "2026-08-29T12:23:58.195Z"
+    },
+    {
+      "id": "1ps6zce9",
+      "itemId": "0mfdu7hq",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "f97s16yc",
+      "minutes": 240,
+      "date": "2026-07-31",
+      "intensity": 2,
+      "note": "idea presentation to winnie jeh at B108",
+      "loggedAt": "2026-08-29T12:24:42.428Z",
+      "updatedAt": "2026-08-29T12:24:42.428Z"
+    },
+    {
+      "id": "0ero97y1",
+      "itemId": "0mfdu7hq",
+      "phase": "Shoot",
+      "deliverableId": "f97s16yc",
+      "minutes": 540,
+      "date": "2026-08-10",
+      "intensity": 3,
+      "note": "Video shooting at Hactl",
+      "loggedAt": "2026-08-29T12:25:21.735Z",
+      "updatedAt": "2026-08-29T12:25:21.735Z"
+    },
+    {
+      "id": "9qmbb27g",
+      "itemId": "0mfdu7hq",
+      "phase": "Other",
+      "deliverableId": "f97s16yc",
+      "minutes": 180,
+      "date": "2026-08-25",
+      "intensity": 2,
+      "note": "rough cut presentation to winnie jeh at B108",
+      "loggedAt": "2026-08-29T12:26:15.309Z",
+      "updatedAt": "2026-08-29T12:26:15.309Z"
+    },
+    {
+      "id": "3l6hjmxv",
+      "itemId": "awfoq2t9",
+      "phase": "Briefing & meetings",
+      "deliverableId": "b08vcmky",
+      "minutes": 30,
+      "date": "2026-08-26",
+      "intensity": 1,
+      "note": "get briefing from kenwin",
+      "loggedAt": "2026-08-29T12:34:58.740Z",
+      "updatedAt": "2026-08-29T12:34:58.740Z"
+    },
+    {
+      "id": "33yt0gwi",
+      "itemId": "9riv2jvx",
+      "phase": "Briefing & meetings",
+      "deliverableId": "td57r4rm",
+      "minutes": 30,
+      "date": "2026-08-03",
+      "intensity": 2,
+      "note": "zoom with PNS to get briefing",
+      "loggedAt": "2026-08-29T12:36:53.968Z",
+      "updatedAt": "2026-08-29T12:36:53.968Z"
+    },
+    {
+      "id": "1r6a01d6",
+      "itemId": "9riv2jvx",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "td57r4rm",
+      "minutes": 180,
+      "date": "2026-08-06",
+      "intensity": 4,
+      "note": "made a storyboard",
+      "loggedAt": "2026-08-29T12:38:19.909Z",
+      "updatedAt": "2026-08-29T12:38:19.909Z"
+    },
+    {
+      "id": "l4so0uuv",
+      "itemId": "9riv2jvx",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "td57r4rm",
+      "minutes": 30,
+      "date": "2026-08-14",
+      "intensity": 2,
+      "note": "change the ai reference picture and video",
+      "loggedAt": "2026-08-29T12:39:20.149Z",
+      "updatedAt": "2026-08-29T12:39:20.149Z"
+    },
+    {
+      "id": "nrlwlw70",
+      "itemId": "9riv2jvx",
+      "phase": "Briefing & meetings",
+      "deliverableId": "td57r4rm",
+      "minutes": 60,
+      "date": "2026-08-18",
+      "intensity": 3,
+      "note": "STB presentation to client at zoom",
+      "loggedAt": "2026-08-29T12:40:03.961Z",
+      "updatedAt": "2026-08-29T12:40:03.961Z"
+    },
+    {
+      "id": "j9fo3isb",
+      "itemId": "9riv2jvx",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "td57r4rm",
+      "minutes": 60,
+      "date": "2026-08-18",
+      "intensity": 3,
+      "note": "STB modifying",
+      "loggedAt": "2026-08-29T12:40:29.688Z",
+      "updatedAt": "2026-08-29T12:40:29.688Z"
+    },
+    {
+      "id": "7rtehvoc",
+      "itemId": "9riv2jvx",
+      "phase": "Offline edit",
+      "deliverableId": "td57r4rm",
+      "minutes": 540,
+      "date": "2026-08-24",
+      "intensity": 4,
+      "note": "Editing",
+      "loggedAt": "2026-08-29T12:41:12.511Z",
+      "updatedAt": "2026-08-29T12:41:12.511Z"
+    },
+    {
+      "id": "na2e1eah",
+      "itemId": "9riv2jvx",
+      "phase": "Revisions",
+      "deliverableId": "td57r4rm",
+      "minutes": 240,
+      "date": "2026-08-26",
+      "intensity": 4,
+      "note": "Revision of the cut",
+      "loggedAt": "2026-08-29T12:41:51.699Z",
+      "updatedAt": "2026-08-29T12:41:51.699Z"
+    },
+    {
+      "id": "afyk7q7k",
+      "itemId": "awfoq2t9",
+      "phase": "Admin & invoicing",
+      "deliverableId": "b08vcmky",
+      "minutes": 30,
+      "date": "2026-08-27",
+      "intensity": 2,
+      "note": "sending quotation",
+      "loggedAt": "2026-08-29T12:42:26.586Z",
+      "updatedAt": "2026-08-29T12:42:26.586Z"
+    },
+    {
+      "id": "z1mzat58",
+      "itemId": "adpd7ns6",
+      "phase": "Briefing & meetings",
+      "deliverableId": "",
+      "minutes": 60,
+      "date": "2026-08-28",
+      "intensity": 3,
+      "note": "meeting with LD in person",
+      "loggedAt": "2026-08-29T12:44:35.960Z",
+      "updatedAt": "2026-08-29T12:44:35.960Z"
+    },
+    {
+      "id": "qssh2u01",
+      "itemId": "adpd7ns6",
+      "phase": "Admin & invoicing",
+      "deliverableId": "4tyovlwo",
+      "minutes": 120,
+      "date": "2026-08-28",
+      "intensity": 3,
+      "note": "handling 30 CEF-4 and 5 form",
+      "loggedAt": "2026-08-29T12:45:09.724Z",
+      "updatedAt": "2026-08-29T12:45:09.724Z"
+    },
+    {
+      "id": "wqsazzk4",
+      "itemId": "adpd7ns6",
+      "phase": "Briefing & meetings",
+      "deliverableId": "4tyovlwo",
+      "minutes": 120,
+      "date": "2026-08-21",
+      "intensity": 4,
+      "note": "understand what happen between different parties, phone call with LD, director, and her assistant",
+      "loggedAt": "2026-08-29T12:46:07.220Z",
+      "updatedAt": "2026-08-29T12:46:07.220Z"
+    },
+    {
+      "id": "d9blv47v",
+      "itemId": "adpd7ns6",
+      "phase": "Briefing & meetings",
+      "deliverableId": "4tyovlwo",
+      "minutes": 60,
+      "date": "2026-08-21",
+      "intensity": 2,
+      "note": "sending application email to LD",
+      "loggedAt": "2026-08-29T12:46:32.269Z",
+      "updatedAt": "2026-08-29T12:46:32.269Z"
+    },
+    {
+      "id": "wlvraj1l",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "4tyovlwo",
+      "minutes": 60,
+      "date": "2026-08-26",
+      "intensity": 2,
+      "note": "back and forth phone call with LD and commutation with sang",
+      "loggedAt": "2026-08-29T12:47:21.186Z",
+      "updatedAt": "2026-08-29T12:47:21.186Z"
+    },
+    {
+      "id": "e8ixlksm",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 240,
+      "date": "2026-08-12",
+      "intensity": 2,
+      "note": "sending tons of email to different location parties",
+      "loggedAt": "2026-08-29T12:49:13.854Z",
+      "updatedAt": "2026-08-29T12:49:13.854Z"
+    },
+    {
+      "id": "4jhnjopx",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 180,
+      "date": "2026-08-13",
+      "intensity": 3,
+      "note": "so many phone call for locations",
+      "loggedAt": "2026-08-29T12:49:47.811Z",
+      "updatedAt": "2026-08-29T12:49:47.811Z"
+    },
+    {
+      "id": "jkof0r8l",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 120,
+      "date": "2026-08-14",
+      "intensity": 3,
+      "note": "phone calls and emails to locations",
+      "loggedAt": "2026-08-29T12:50:26.167Z",
+      "updatedAt": "2026-08-29T12:50:26.167Z"
+    },
+    {
+      "id": "gz0ezcmn",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 180,
+      "date": "2026-08-17",
+      "intensity": 3,
+      "note": "many phone calls",
+      "loggedAt": "2026-08-29T12:51:12.951Z",
+      "updatedAt": "2026-08-29T12:51:12.951Z"
+    },
+    {
+      "id": "bwvo7kxc",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 60,
+      "date": "2026-08-19",
+      "intensity": 3,
+      "note": "phone calls and emails",
+      "loggedAt": "2026-08-29T12:51:38.828Z",
+      "updatedAt": "2026-08-29T12:51:38.828Z"
+    },
+    {
+      "id": "8egdu8wz",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 180,
+      "date": "2026-08-21",
+      "intensity": 3,
+      "note": "phone calls",
+      "loggedAt": "2026-08-29T12:52:01.133Z",
+      "updatedAt": "2026-08-29T12:52:01.133Z"
+    },
+    {
+      "id": "56382hi2",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 60,
+      "date": "2026-08-24",
+      "intensity": 3,
+      "note": "phone calls",
+      "loggedAt": "2026-08-29T12:52:36.802Z",
+      "updatedAt": "2026-08-29T12:52:36.802Z"
+    },
+    {
+      "id": "yufbnrck",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 60,
+      "date": "2026-08-26",
+      "intensity": 3,
+      "note": "phone calls",
+      "loggedAt": "2026-08-29T12:52:57.867Z",
+      "updatedAt": "2026-08-29T12:52:57.867Z"
+    },
+    {
+      "id": "dtm1bpjv",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 120,
+      "date": "2026-08-27",
+      "intensity": 3,
+      "note": "phone calls and emails",
+      "loggedAt": "2026-08-29T12:53:22.770Z",
+      "updatedAt": "2026-08-29T12:53:22.770Z"
+    },
+    {
+      "id": "vg719bxf",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "jb1l5onn",
+      "minutes": 240,
+      "date": "2026-08-28",
+      "intensity": 3,
+      "note": "phone call and emails",
+      "loggedAt": "2026-08-29T12:53:35.099Z",
+      "updatedAt": "2026-08-29T12:53:35.099Z"
+    },
+    {
+      "id": "f4jzclnn",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "06iyx90f",
+      "minutes": 180,
+      "date": "2026-08-04",
+      "intensity": 3,
+      "note": "",
+      "loggedAt": "2026-08-29T12:56:50.950Z",
+      "updatedAt": "2026-08-29T12:56:50.950Z"
+    },
+    {
+      "id": "vs902bef",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "06iyx90f",
+      "minutes": 180,
+      "date": "2026-08-11",
+      "intensity": 3,
+      "note": "",
+      "loggedAt": "2026-08-29T12:56:57.581Z",
+      "updatedAt": "2026-08-29T12:56:57.581Z"
+    },
+    {
+      "id": "wqxlrrce",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "06iyx90f",
+      "minutes": 240,
+      "date": "2026-08-18",
+      "intensity": 3,
+      "note": "",
+      "loggedAt": "2026-08-29T12:57:02.682Z",
+      "updatedAt": "2026-08-29T12:57:02.682Z"
+    },
+    {
+      "id": "ys16wdx1",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "06iyx90f",
+      "minutes": 180,
+      "date": "2026-08-25",
+      "intensity": 3,
+      "note": "",
+      "loggedAt": "2026-08-29T12:57:12.672Z",
+      "updatedAt": "2026-08-29T12:57:12.672Z"
+    },
+    {
+      "id": "dxdn0hge",
+      "itemId": "6hgl7men",
+      "phase": "Other",
+      "deliverableId": "bctjay28",
+      "minutes": 120,
+      "date": "2026-08-25",
+      "intensity": 3,
+      "note": "lunch meeting",
+      "loggedAt": "2026-08-29T12:57:54.026Z",
+      "updatedAt": "2026-08-29T12:57:54.026Z"
+    },
+    {
+      "id": "7wodtxu0",
+      "itemId": "awfoq2t9",
+      "phase": "Offline edit",
+      "deliverableId": "b08vcmky",
+      "minutes": 120,
+      "date": "2026-08-29",
+      "intensity": 3,
+      "note": "setting up AE project and test the ratio",
+      "loggedAt": "2026-08-29T16:43:42.169Z",
+      "updatedAt": "2026-08-29T16:43:42.169Z"
+    },
+    {
+      "id": "f2rqp8a0",
+      "itemId": "awfoq2t9",
+      "phase": "Offline edit",
+      "deliverableId": "b08vcmky",
+      "minutes": 240,
+      "date": "2026-08-30",
+      "intensity": 3,
+      "note": "prompting the ai video, made preview and export Video 1",
+      "loggedAt": "2026-08-30T16:26:34.865Z",
+      "updatedAt": "2026-08-30T16:26:34.865Z"
+    },
+    {
+      "id": "2dlxyxp6",
+      "itemId": "awfoq2t9",
+      "phase": "Revisions",
+      "deliverableId": "b08vcmky",
+      "minutes": 30,
+      "date": "2026-08-31",
+      "intensity": 2,
+      "note": "little revision for the preview",
+      "loggedAt": "2026-08-31T05:22:15.953Z",
+      "updatedAt": "2026-08-31T05:22:15.953Z"
+    },
+    {
+      "id": "z1hnu60n",
+      "itemId": "nly1s44p",
+      "phase": "Admin & invoicing",
+      "deliverableId": "g995suck",
+      "minutes": 30,
+      "date": "2026-08-31",
+      "intensity": 2,
+      "note": "communicate with HKIA, check account, and download documents",
+      "loggedAt": "2026-08-31T07:24:48.336Z",
+      "updatedAt": "2026-08-31T07:24:48.336Z"
+    },
+    {
+      "id": "4mmybnkb",
+      "itemId": "adpd7ns6",
+      "phase": "Admin & invoicing",
+      "deliverableId": "jb1l5onn",
+      "minutes": 30,
+      "date": "2026-08-31",
+      "intensity": 2,
+      "note": "phone call with government departments",
+      "loggedAt": "2026-08-31T07:50:48.416Z",
+      "updatedAt": "2026-08-31T07:50:48.416Z"
+    },
+    {
+      "id": "ig8ex8mc",
+      "itemId": "adpd7ns6",
+      "phase": "Admin & invoicing",
+      "deliverableId": "4tyovlwo",
+      "minutes": 30,
+      "date": "2026-08-31",
+      "intensity": 2,
+      "note": "phone call and communications",
+      "loggedAt": "2026-08-31T07:51:03.869Z",
+      "updatedAt": "2026-08-31T07:51:03.869Z"
+    },
+    {
+      "id": "7ogieojd",
+      "itemId": "adpd7ns6",
+      "phase": "Other",
+      "deliverableId": "4tyovlwo",
+      "minutes": 30,
+      "date": "2026-09-01",
+      "intensity": 1,
+      "note": "phone call",
+      "loggedAt": "2026-09-01T07:46:07.137Z",
+      "updatedAt": "2026-09-01T07:46:07.137Z"
+    }
+  ],
   "settings": {
     "targetRate": "",
     "updatedAt": "2026-09-01T08:32:58.859Z"
