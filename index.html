@@ -449,14 +449,37 @@ function App() {
     download("ledger-" + s + ".csv", buildCSV(), "text/csv");
     setToast("Downloaded");
   };
+  /* Files exported before sync existed have no ids/timestamps on some records.
+     Fill them in so merging treats them as ordinary records. */
+  const normalizeImport = (obj) => {
+    const fix = (arr) => (arr || []).map(r => ({
+      ...r,
+      id: r.id || uid(),
+      updatedAt: r.updatedAt || r.loggedAt || r.createdAt || nowISO(),
+    }));
+    const items = fix(obj.items).map(i => ({
+      ...i,
+      status: i.status || (i.archived ? "done" : "active"),
+      deliverables: i.deliverables || (i.unit ? [{ id: uid(), name: i.unit }] : []),
+    }));
+    return {
+      clients: fix(obj.clients),
+      items,
+      sessions: fix(obj.sessions),
+      settings: obj.settings ? { ...obj.settings, updatedAt: obj.settings.updatedAt || "" } : {},
+      meta: obj.meta || {},
+    };
+  };
+
   const importJSON = (text) => {
     try {
-      const incoming = JSON.parse(text);
+      const incoming = normalizeImport(JSON.parse(text));
+      const counts = incoming.sessions.length + " sessions, " + incoming.items.length + " work items";
       setRaw(d => mergeData(d, incoming));
       schedulePush();
-      setToast("Imported and merged");
+      setToast("Imported " + counts);
       return true;
-    } catch (e) { setToast("That file didn't parse"); return false; }
+    } catch (e) { setToast("That file didn't parse — is it the JSON, not the CSV?"); return false; }
   };
 
   /* ---- timer ---- */
