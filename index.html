@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Time Ledger</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Time Ledger">
+<meta name="theme-color" content="#f1f1f0">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #f1f1f0; }
+body {
+  --ink: #141414; --mid: #5c5c5c; --soft: #949494; --line: #dcdcdc;
+  --paper: #f1f1f0; --card: #ffffff; --tally: #c03a2b;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 90px; }
+.mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+.slate { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--soft); }
+.card { background: var(--card); border: 1px solid var(--line); }
+.rule { border-top: 1px solid var(--line); }
+button { font-family: inherit; }
+.btn { font-size: 14px; padding: 10px 15px; border: 1px solid var(--ink);
+  background: var(--ink); color: #fff; cursor: pointer; border-radius: 0; }
+.btn:active { opacity: .7; }
+.btn:disabled { opacity: .3; }
+.btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.tally { background: var(--tally); border-color: var(--tally); color: #fff; }
+.input, .select, .textarea { width: 100%; font-size: 16px; padding: 11px 10px;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 0; outline: none; font-family: inherit; -webkit-appearance: none; appearance: none; }
+.select { background-image: none; }
+.input:focus, .select:focus, .textarea:focus { border-color: var(--ink); }
+.seg { display: flex; border: 1px solid var(--ink); }
+.seg button { flex: 1; padding: 10px 4px; font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; background: transparent; color: var(--ink); border: none;
+  cursor: pointer; font-family: ui-monospace, Menlo, monospace; }
+.seg button.on { background: var(--ink); color: #fff; }
+.subseg { display: flex; gap: 18px; border-bottom: 1px solid var(--line); }
+.subseg button { padding: 8px 0; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  background: none; border: none; border-bottom: 2px solid transparent; color: var(--soft);
+  cursor: pointer; font-family: ui-monospace, Menlo, monospace; margin-bottom: -1px; }
+.subseg button.on { color: var(--ink); border-bottom-color: var(--ink); }
+.chip { font-size: 12px; padding: 5px 9px; border: 1px solid var(--line); color: var(--mid);
+  font-family: ui-monospace, Menlo, monospace; white-space: nowrap; background: none; cursor: pointer; }
+.strip { display: flex; height: 44px; border: 1px solid var(--line); background: var(--card); overflow: hidden; }
+.block { min-width: 3px; border-right: 1px solid var(--card); }
+.rec { width: 8px; height: 8px; border-radius: 50%; background: var(--tally); display: inline-block; }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none } }
+.item { display: flex; align-items: center; gap: 10px; padding: 13px 12px; border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: none; }
+.play { width: 38px; height: 38px; flex-shrink: 0; border: 1px solid var(--ink);
+  background: transparent; color: var(--ink); cursor: pointer; font-size: 12px; }
+.plain { background: none; border: none; padding: 0; cursor: pointer; text-align: left; color: inherit; }
+.link { color: var(--mid); font-size: 13px; text-decoration: underline; cursor: pointer;
+  background: none; border: none; padding: 4px; }
+.bar { height: 10px; background: var(--ink); }
+.overlay { position: fixed; inset: 0; background: rgba(20,20,20,.45); display: flex;
+  align-items: flex-start; justify-content: center; padding: 20px 12px; overflow-y: auto; z-index: 50; }
+.modal { background: var(--card); border: 1px solid var(--ink); width: 100%; max-width: 460px; padding: 18px; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row { display: flex; }
+.gap { gap: 8px; }
+.flex1 { flex: 1; min-width: 0; }
+:focus-visible { outline: 2px solid var(--tally); outline-offset: 2px; }
+</style>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7/babel.min.js" crossorigin></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+/* ================================ config ============================== */
+
+const DATA_KEY  = "tl.data";
+const TIMER_KEY = "tl.timer";     // device-local, never synced
+const CONF_KEY  = "tl.github";    // device-local credentials
+
+const TYPES = [
+  { id: "paid",         label: "Paid job",       note: "Booked and invoiced" },
+  { id: "pitch",        label: "Pitch / tender", note: "Speculative, may go nowhere" },
+  { id: "relationship", label: "Relationship",   note: "Meals, calls, favours, BNI" },
+  { id: "admin",        label: "Admin",          note: "Quoting, invoicing, chasing payment" },
+];
+
+const PHASES = ["Briefing & meetings","Concept & deck","Script","Storyboard & pre-pro",
+  "Recce & casting","Shoot","Offline edit","Online / grade / sound","Revisions",
+  "Admin & invoicing","Other"];
+
+const SOURCES = ["BNI referral","Past client","Agency","Cold outreach","Personal network","Other"];
+
+const INTENSITY = {
+  1:{label:"Easy",alpha:.16}, 2:{label:"Light",alpha:.32}, 3:{label:"Normal",alpha:.5},
+  4:{label:"Heavy",alpha:.72}, 5:{label:"Draining",alpha:.93},
+};
+
+/* ============================== utilities ============================= */
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const nowISO = () => new Date().toISOString();
+const todayKey = (d = new Date()) => {
+  const x = new Date(d);
+  return x.getFullYear() + "-" + String(x.getMonth()+1).padStart(2,"0") + "-" + String(x.getDate()).padStart(2,"0");
+};
+const monthKey = (iso) => iso.slice(0,7);
+
+function fmtHM(minutes) {
+  const m = Math.max(0, Math.round(minutes));
+  const h = Math.floor(m/60), r = m%60;
+  if (!h) return r + "m";
+  if (!r) return h + "h";
+  return h + "h " + r + "m";
+}
+function fmtClock(sec) {
+  const s = Math.max(0, Math.floor(sec));
+  return [Math.floor(s/3600), Math.floor((s%3600)/60), s%60]
+    .map(n => String(n).padStart(2,"0")).join(":");
+}
+function fmtHKD(n) {
+  if (n == null || n === "" || isNaN(n)) return "—";
+  return "HK$" + Number(n).toLocaleString("en-HK", { maximumFractionDigits: 0 });
+}
+function ago(iso) {
+  if (!iso) return "never";
+  const s = Math.floor((Date.now() - new Date(iso)) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.floor(s/60) + "m ago";
+  if (s < 86400) return Math.floor(s/3600) + "h ago";
+  return Math.floor(s/86400) + "d ago";
+}
+function median(a) {
+  if (!a.length) return 0;
+  const s = [...a].sort((x,y)=>x-y), m = Math.floor(s.length/2);
+  return s.length % 2 ? s[m] : (s[m-1]+s[m])/2;
+}
+const live = (arr) => (arr || []).filter(r => !r.deleted);
+
+/* ========================== local persistence ========================= */
+
+const emptyData = () => ({
+  clients: [], items: [], sessions: [],
+  settings: { targetRate: "", updatedAt: nowISO() },
+  meta: { createdAt: nowISO() },
+});
+
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(DATA_KEY);
+    if (raw) return { ...emptyData(), ...JSON.parse(raw) };
+  } catch (e) {}
+  return emptyData();
+}
+function saveLocal(d) {
+  try { localStorage.setItem(DATA_KEY, JSON.stringify(d)); return true; }
+  catch (e) { return false; }
+}
+function loadTimer() {
+  try { const r = localStorage.getItem(TIMER_KEY); return r ? JSON.parse(r) : null; }
+  catch (e) { return null; }
+}
+function saveTimer(t) {
+  try { t ? localStorage.setItem(TIMER_KEY, JSON.stringify(t)) : localStorage.removeItem(TIMER_KEY); } catch (e) {}
+}
+function loadConf() {
+  try { const r = localStorage.getItem(CONF_KEY); return r ? JSON.parse(r) : { repo:"", path:"ledger.json", token:"" }; }
+  catch (e) { return { repo:"", path:"ledger.json", token:"" }; }
+}
+function saveConf(c) { try { localStorage.setItem(CONF_KEY, JSON.stringify(c)); } catch (e) {} }
+
+/* ============================ merge by record ========================= */
+/* Two devices never overwrite each other wholesale. Every record carries an
+   id and updatedAt; the newer one wins. Deletes are tombstones, so a delete
+   on the phone does not come back from the Mac.                           */
+
+function mergeList(a = [], b = []) {
+  const map = new Map();
+  [...a, ...b].forEach(r => {
+    if (!r || !r.id) return;
+    const seen = map.get(r.id);
+    if (!seen || (r.updatedAt || "") > (seen.updatedAt || "")) map.set(r.id, r);
+  });
+  return [...map.values()];
+}
+
+function mergeData(local, remote) {
+  if (!remote) return local;
+  const ls = local.settings || {}, rs = remote.settings || {};
+  return {
+    clients:  mergeList(local.clients,  remote.clients),
+    items:    mergeList(local.items,    remote.items),
+    sessions: mergeList(local.sessions, remote.sessions),
+    settings: (rs.updatedAt || "") > (ls.updatedAt || "") ? rs : ls,
+    meta:     local.meta || remote.meta || {},
+  };
+}
+
+/* ============================= github sync =========================== */
+
+function b64encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  const CH = 0x8000;
+  for (let i = 0; i < bytes.length; i += CH)
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+  return btoa(bin);
+}
+function b64decode(b64) {
+  const bin = atob((b64 || "").replace(/\s/g, ""));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function ghHeaders(token) {
+  return {
+    "Authorization": "Bearer " + token,
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+}
+
+/* Read the file. Returns { data, sha } — sha null when the file is new.
+   cache:"no-store" plus the API endpoint avoids the 5-minute raw cache.  */
+async function ghRead(conf) {
+  const url = "https://api.github.com/repos/" + conf.repo + "/contents/" +
+              encodeURIComponent(conf.path) + "?ref=main&t=" + Date.now();
+  const res = await fetch(url, { headers: ghHeaders(conf.token), cache: "no-store" });
+  if (res.status === 404) return { data: null, sha: null };
+  if (res.status === 401) throw new Error("Token rejected — check it hasn't expired");
+  if (res.status === 403) throw new Error("Access denied — token lacks Contents permission on this repo");
+  if (!res.ok) throw new Error("Read failed (" + res.status + ")");
+  const json = await res.json();
+  return { data: JSON.parse(b64decode(json.content)), sha: json.sha };
+}
+
+/* Read, merge, write back. One round trip each way, no lost writes. */
+async function ghSync(conf, localData) {
+  if (!conf.repo || !conf.token) throw new Error("Not configured");
+  const { data: remote, sha } = await ghRead(conf);
+  const merged = mergeData(localData, remote);
+  const body = {
+    message: "ledger " + new Date().toISOString().slice(0, 16).replace("T", " "),
+    content: b64encode(JSON.stringify(merged, null, 2)),
+  };
+  if (sha) body.sha = sha;
+  const res = await fetch(
+    "https://api.github.com/repos/" + conf.repo + "/contents/" + encodeURIComponent(conf.path),
+    { method: "PUT", headers: ghHeaders(conf.token), body: JSON.stringify(body) }
+  );
+  if (res.status === 409 || res.status === 422)
+    throw new Error("The file changed mid-save — press sync again");
+  if (!res.ok) throw new Error("Write failed (" + res.status + ")");
+  return merged;
+}
+
+/* ============================ small pieces =========================== */
+
+function Field({ label, children }) {
+  return <div style={{ marginBottom: 14 }}>
+    <div className="slate" style={{ marginBottom: 5 }}>{label}</div>
+    {children}
+  </div>;
+}
+
+function Bar({ value, total, muted }) {
+  return <div style={{ height: 10, background: "#ededed" }}>
+    <div className="bar" style={{ width: (total ? (value/total)*100 : 0) + "%",
+      background: muted ? "var(--soft)" : "var(--ink)" }} />
+  </div>;
+}
+
+/* ================================ app ================================ */
+
+function App() {
+  const [raw, setRaw]       = useState(loadLocal);
+  const [timer, setTimer]   = useState(loadTimer);
+  const [conf, setConf]     = useState(loadConf);
+  const [view, setView]     = useState("work");
+  const [openJob, setOpenJob] = useState(null);
+  const [modal, setModal]   = useState(null);
+  const [toast, setToast]   = useState("");
+  const [now, setNow]       = useState(Date.now());
+  const [sync, setSync]     = useState({ busy: false, at: null, error: null });
+  const pushTimer = useRef(null);
+  const dirty = useRef(false);
+
+  /* ---- persistence ---- */
+  useEffect(() => { saveLocal(raw); }, [raw]);
+  useEffect(() => { saveTimer(timer); }, [timer]);
+  useEffect(() => { saveConf(conf); }, [conf]);
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
+  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(""), 3000); return () => clearTimeout(t); }, [toast]);
+
+  /* ---- sync ---- */
+  const runSync = useCallback(async (silent) => {
+    if (!conf.repo || !conf.token) { if (!silent) setToast("Set up GitHub first"); return; }
+    setSync(s => ({ ...s, busy: true, error: null }));
+    try {
+      const merged = await ghSync(conf, JSON.parse(localStorage.getItem(DATA_KEY) || "{}"));
+      setRaw(merged);
+      dirty.current = false;
+      setSync({ busy: false, at: nowISO(), error: null });
+      if (!silent) setToast("Synced");
+    } catch (e) {
+      setSync(s => ({ ...s, busy: false, error: e.message }));
+      if (!silent) setToast(e.message);
+    }
+  }, [conf]);
+
+  /* pull on open, and whenever you come back to the app */
+  useEffect(() => {
+    if (!conf.repo || !conf.token) return;
+    runSync(true);
+    const onVisible = () => { if (document.visibilityState === "visible") runSync(true); };
+    window.addEventListener("focus", onVisible);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("focus", onVisible);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [conf.repo, conf.token, runSync]);
+
+  /* push a few seconds after you stop editing */
+  const schedulePush = () => {
+    dirty.current = true;
+    if (!conf.repo || !conf.token) return;
+    clearTimeout(pushTimer.current);
+    pushTimer.current = setTimeout(() => runSync(true), 4000);
+  };
+
+  /* ---- mutations ---- */
+  const update = (fn) => { setRaw(d => fn({ ...d })); schedulePush(); };
+  const stamp = (r) => ({ ...r, updatedAt: nowISO() });
+
+  const data = useMemo(() => ({
+    ...raw,
+    clients: live(raw.clients), items: live(raw.items), sessions: live(raw.sessions),
+    settings: raw.settings || {},
+  }), [raw]);
+
+  const itemById   = (id) => data.items.find(i => i.id === id);
+  const clientById = (id) => data.clients.find(c => c.id === id);
+
+  /* ---- export ---- */
+  const buildJSON = () => JSON.stringify(raw, null, 2);
+  const buildCSV = () => {
+    const head = ["date","work_item","type","client","client_source","phase","deliverable",
+      "minutes","hours","intensity","note","fee_hkd"];
+    const rows = data.sessions.map(s => {
+      const it = itemById(s.itemId) || {}, cl = clientById(it.clientId) || {};
+      const dl = (it.deliverables || []).find(x => x.id === s.deliverableId);
+      return [s.date, it.name||"", it.type||"", cl.name||"", cl.source||"", s.phase||"",
+        dl?dl.name:"", s.minutes, (s.minutes/60).toFixed(2), s.intensity||"",
+        (s.note||"").replace(/"/g,"'"), it.fee||""];
+    });
+    return [head,...rows].map(r => r.map(c => '"'+String(c==null?"":c)+'"').join(",")).join("\n");
+  };
+  const download = (name, text, mime) => {
+    try {
+      const url = URL.createObjectURL(new Blob([text], { type: mime }));
+      const a = document.createElement("a");
+      a.href = url; a.download = name; document.body.appendChild(a); a.click();
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 800);
+      return true;
+    } catch (e) { return false; }
+  };
+  const runExport = () => {
+    const s = todayKey();
+    download("ledger-" + s + ".json", buildJSON(), "application/json");
+    download("ledger-" + s + ".csv", buildCSV(), "text/csv");
+    setToast("Downloaded");
+  };
+  const importJSON = (text) => {
+    try {
+      const incoming = JSON.parse(text);
+      setRaw(d => mergeData(d, incoming));
+      schedulePush();
+      setToast("Imported and merged");
+      return true;
+    } catch (e) { setToast("That file didn't parse"); return false; }
+  };
+
+  /* ---- timer ---- */
+  const startTimer = (itemId, phase, deliverableId) => {
+    setTimer({ itemId, phase: phase || PHASES[0], deliverableId: deliverableId || "", startedAt: nowISO() });
+    setView("track");
+  };
+  const stopTimer = () => {
+    if (!timer) return;
+    const mins = Math.max(1, Math.round((Date.now() - new Date(timer.startedAt)) / 60000));
+    setModal({ kind: "log", title: "Log this session", fromTimer: true, preset: {
+      itemId: timer.itemId, phase: timer.phase, deliverableId: timer.deliverableId || "",
+      minutes: mins, date: todayKey(new Date(timer.startedAt)), intensity: 3, note: "",
+    }});
+  };
+  const commitSession = (s, fromTimer, keepOpen) => {
+    update(d => { d.sessions = [...d.sessions, stamp({ id: uid(), ...s })]; return d; });
+    if (fromTimer) setTimer(null);
+    if (!keepOpen) setModal(null);
+    setToast(keepOpen ? "Logged — next one" : "Logged");
+  };
+  const saveSessionEdit = (id, patch) => {
+    update(d => { d.sessions = d.sessions.map(x => x.id === id ? stamp({ ...x, ...patch }) : x); return d; });
+    setModal(null); setToast("Updated");
+  };
+  const deleteSession = (id) =>
+    update(d => { d.sessions = d.sessions.map(x => x.id === id ? stamp({ ...x, deleted: true }) : x); return d; });
+
+  const runningItem = timer ? itemById(timer.itemId) : null;
+  const elapsed = timer ? (now - new Date(timer.startedAt)) / 1000 : 0;
+
+  return (
+    <div className="wrap">
+      <div className="row" style={{ alignItems: "flex-end", justifyContent: "space-between", marginBottom: 14 }}>
+        <div>
+          <div className="slate">Monos Creative</div>
+          <div className="mono" style={{ fontSize: 19, fontWeight: 600, letterSpacing: "-.02em" }}>Time Ledger</div>
+        </div>
+        <button className="link" onClick={() => setModal({ kind: "settings" })}>
+          {sync.error ? "⚠ Sync problem" : conf.repo ? "Synced " + ago(sync.at) : "Set up sync"}
+        </button>
+      </div>
+
+      {sync.error && (
+        <div className="card" style={{ padding: 12, marginBottom: 14, borderColor: "var(--tally)" }}>
+          <div className="slate" style={{ color: "var(--tally)", marginBottom: 4 }}>Not syncing</div>
+          <div style={{ fontSize: 13, marginBottom: 8 }}>{sync.error}</div>
+          <button className="btn btn-ghost" onClick={() => runSync(false)}>Try again</button>
+        </div>
+      )}
+
+      {timer && (
+        <div className="card" style={{ padding: 16, marginBottom: 16, borderColor: "var(--tally)", borderWidth: 2 }}>
+          <div className="row gap" style={{ alignItems: "center", marginBottom: 8 }}>
+            <span className="rec pulse" />
+            <span className="slate" style={{ color: "var(--tally)" }}>Recording</span>
+          </div>
+          <div className="mono" style={{ fontSize: 44, lineHeight: 1, letterSpacing: "-.03em" }}>{fmtClock(elapsed)}</div>
+          <div style={{ fontSize: 14, marginTop: 8 }}>
+            {runningItem ? runningItem.name : "Unknown job"}
+            <span className="slate" style={{ marginLeft: 8 }}>{timer.phase}</span>
+          </div>
+          <div className="row gap" style={{ marginTop: 12 }}>
+            <button className="btn tally" onClick={stopTimer}>Stop and log</button>
+            <button className="btn btn-ghost" onClick={() => setTimer(null)}>Discard</button>
+          </div>
+        </div>
+      )}
+
+      <div className="seg" style={{ marginBottom: 18 }}>
+        {[["work","Jobs"],["track","Track"],["review","Review"]].map(([id,label]) =>
+          <button key={id} className={view===id?"on":""}
+            onClick={() => { setView(id); setOpenJob(null); }}>{label}</button>)}
+      </div>
+
+      {view === "work" && !openJob &&
+        <WorkView data={data} clientById={clientById} timer={timer}
+          onStart={it => setModal({ kind:"start", item: it })}
+          onOpenJob={it => setOpenJob(it.id)}
+          onNewItem={() => setModal({ kind:"item" })}
+          onNewClient={() => setModal({ kind:"client" })}
+          onEditClient={c => setModal({ kind:"client", client: c })} />}
+
+      {view === "work" && openJob &&
+        <JobDetail item={itemById(openJob)} data={data} clientById={clientById} timer={timer}
+          onBack={() => setOpenJob(null)}
+          onEdit={it => setModal({ kind:"item", item: it })}
+          onStart={it => setModal({ kind:"start", item: it })}
+          onAddTime={it => setModal({ kind:"log", title:"Add time", lockedItem: it })}
+          onEditSession={s => setModal({ kind:"log", title:"Edit session", editSession: s })} />}
+
+      {view === "track" &&
+        <TrackView data={data} itemById={itemById} clientById={clientById}
+          onManual={() => setModal({ kind:"log", title:"Enter time manually" })}
+          onEditSession={s => setModal({ kind:"log", title:"Edit session", editSession: s })} />}
+
+      {view === "review" && <ReviewView data={data} itemById={itemById} clientById={clientById} />}
+
+      {toast && <div className="mono" style={{ position:"fixed", left:"50%", bottom:24,
+        transform:"translateX(-50%)", background:"var(--ink)", color:"#fff",
+        padding:"11px 16px", fontSize:12, zIndex:60, maxWidth:"90%" }}>{toast}</div>}
+
+      {modal && <Modals modal={modal} data={data} raw={raw} conf={conf} setConf={setConf}
+        sync={sync} runSync={runSync} close={() => setModal(null)} update={update} stamp={stamp}
+        commitSession={commitSession} saveSessionEdit={saveSessionEdit} deleteSession={deleteSession}
+        startTimer={startTimer} buildJSON={buildJSON} runExport={runExport}
+        importJSON={importJSON} setToast={setToast} />}
+    </div>
+  );
+}
+
+/* ============================== Jobs view ============================ */
+
+function WorkView({ data, clientById, timer, onStart, onOpenJob, onNewItem, onNewClient, onEditClient }) {
+  const [tab, setTab] = useState("jobs");
+  const [showDone, setShowDone] = useState(false);
+  const totals = useMemo(() => {
+    const m = {};
+    data.sessions.forEach(s => m[s.itemId] = (m[s.itemId]||0) + s.minutes);
+    return m;
+  }, [data.sessions]);
+  const target = Number(data.settings.targetRate) || null;
+
+  return (
+    <div>
+      <div className="subseg" style={{ marginBottom: 16 }}>
+        {[["jobs","Jobs"],["clients","Clients"]].map(([id,label]) =>
+          <button key={id} className={tab===id?"on":""} onClick={() => setTab(id)}>{label}</button>)}
+      </div>
+
+      {tab === "jobs" && (!data.items.length ? (
+        <div className="card" style={{ padding: 26, textAlign: "center" }}>
+          <div className="slate" style={{ marginBottom: 8 }}>Empty ledger</div>
+          <p style={{ fontSize: 14, color: "var(--mid)", marginTop: 0, marginBottom: 16 }}>
+            Add the job you're working on right now.</p>
+          <button className="btn" onClick={onNewItem}>Add work item</button>
+        </div>
+      ) : (
+        <div>
+          <div className="row gap" style={{ marginBottom: 16 }}>
+            <button className="btn flex1" onClick={onNewItem}>New work item</button>
+            <button className="btn btn-ghost" onClick={() => setShowDone(!showDone)}>
+              {showDone ? "Hide done" : "Show done"}</button>
+          </div>
+          {TYPES.map(t => {
+            const list = data.items.filter(i => i.type === t.id && (showDone || i.status !== "done"));
+            if (!list.length) return null;
+            return (
+              <div key={t.id} style={{ marginBottom: 20 }}>
+                <div className="slate" style={{ marginBottom: 8 }}>{t.label} · {list.length}</div>
+                <div className="card">
+                  {list.map(i => {
+                    const cl = clientById(i.clientId), mins = totals[i.id] || 0;
+                    const rate = i.fee && mins ? Number(i.fee)/(mins/60) : null;
+                    const isRunning = timer && timer.itemId === i.id;
+                    return (
+                      <div key={i.id} className="item">
+                        <button className="play" onClick={() => onStart(i)} disabled={!!timer}
+                          style={isRunning ? { background:"var(--tally)", borderColor:"var(--tally)", color:"#fff" }
+                            : timer ? { opacity:.25 } : {}}>{isRunning ? "●" : "▶"}</button>
+                        <button className="plain flex1" onClick={() => onOpenJob(i)}>
+                          <div className="truncate" style={{ fontSize: 15 }}>
+                            {i.name}
+                            {i.bni && <span className="chip" style={{ marginLeft: 6 }}>BNI</span>}
+                            {i.status === "done" && <span className="chip" style={{ marginLeft: 6 }}>Done</span>}
+                          </div>
+                          <div className="slate truncate" style={{ marginTop: 4 }}>
+                            {cl ? cl.name : "No client"}
+                            {(i.deliverables||[]).length > 0 && " · " + i.deliverables.length + " deliverables"}
+                            {i.fee ? " · " + fmtHKD(i.fee) : ""}
+                          </div>
+                        </button>
+                        <div style={{ textAlign: "right" }}>
+                          <div className="mono" style={{ fontSize: 15 }}>{fmtHM(mins)}</div>
+                          {rate && <div className="mono" style={{ fontSize: 11,
+                            color: target && rate < target ? "var(--tally)" : "var(--soft)" }}>
+                            {fmtHKD(rate)}/h</div>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+
+      {tab === "clients" && (
+        <div>
+          <button className="btn" style={{ width: "100%", marginBottom: 16 }} onClick={onNewClient}>New client</button>
+          {!data.clients.length ? <div className="card slate" style={{ padding: 26, textAlign: "center" }}>No clients yet</div>
+          : <div className="card">{data.clients.map(c =>
+              <button key={c.id} className="plain item" style={{ width: "100%" }} onClick={() => onEditClient(c)}>
+                <span className="flex1" style={{ fontSize: 15 }}>{c.name}</span>
+                <span className="chip">{c.source}</span>
+              </button>)}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================= Job detail ============================ */
+
+function JobDetail({ item, data, clientById, timer, onBack, onEdit, onStart, onAddTime, onEditSession }) {
+  if (!item) return <div className="card" style={{ padding: 26, textAlign: "center" }}>
+    <div className="slate" style={{ marginBottom: 12 }}>This job no longer exists</div>
+    <button className="btn" onClick={onBack}>Back to jobs</button></div>;
+
+  const cl = clientById(item.clientId);
+  const sessions = data.sessions.filter(s => s.itemId === item.id).sort((a,b) => b.date.localeCompare(a.date));
+  const mins = sessions.reduce((a,s) => a+s.minutes, 0);
+  const target = Number(data.settings.targetRate) || null;
+  const rate = item.fee && mins ? Number(item.fee)/(mins/60) : null;
+  const dls = item.deliverables || [];
+  const phaseRows = PHASES.map(p => ({ p, mins: sessions.filter(s => s.phase===p).reduce((a,s)=>a+s.minutes,0) }))
+    .filter(x => x.mins > 0).sort((a,b) => b.mins - a.mins);
+
+  return (
+    <div>
+      <button className="link" style={{ marginBottom: 12 }} onClick={onBack}>← All jobs</button>
+      <div className="card" style={{ padding: 16, marginBottom: 16 }}>
+        <div className="slate" style={{ marginBottom: 6 }}>
+          {(TYPES.find(t => t.id === item.type)||{}).label}
+          {cl ? " · " + cl.name : " · no client"}{item.status === "done" ? " · completed" : ""}
+        </div>
+        <div style={{ fontSize: 18, marginBottom: 14 }}>{item.name}</div>
+        <div className="row gap" style={{ alignItems: "baseline" }}>
+          <span className="mono" style={{ fontSize: 30, lineHeight: 1, letterSpacing: "-.03em" }}>{fmtHM(mins)}</span>
+          <span className="slate">{sessions.length} sessions{item.fee ? " · " + fmtHKD(item.fee) : ""}</span>
+        </div>
+        {rate && <div className="mono" style={{ fontSize: 13, marginTop: 4,
+          color: target && rate < target ? "var(--tally)" : "var(--soft)" }}>
+          {fmtHKD(rate)} per hour so far{target ? (rate < target ? " — under target" : " — at or above target") : ""}
+        </div>}
+        <div className="row gap" style={{ marginTop: 16, flexWrap: "wrap" }}>
+          <button className="btn" onClick={() => onAddTime(item)}>Add time</button>
+          <button className="btn btn-ghost" disabled={!!timer} onClick={() => onStart(item)}>Start timer</button>
+          <button className="btn btn-ghost" onClick={() => onEdit(item)}>Edit job</button>
+        </div>
+      </div>
+
+      {dls.length > 0 && <div style={{ marginBottom: 16 }}>
+        <div className="slate" style={{ marginBottom: 8 }}>Deliverables</div>
+        <div className="card">{dls.map(d => {
+          const dm = sessions.filter(s => s.deliverableId === d.id || (!s.deliverableId && dls.length === 1))
+            .reduce((a,s) => a+s.minutes, 0);
+          return <div key={d.id} className="item">
+            <span className="flex1" style={{ fontSize: 14 }}>{d.name}</span>
+            <span className="mono" style={{ fontSize: 14 }}>{fmtHM(dm)}</span></div>;
+        })}</div>
+      </div>}
+
+      {phaseRows.length > 0 && <div style={{ marginBottom: 16 }}>
+        <div className="slate" style={{ marginBottom: 8 }}>Where the time went</div>
+        <div className="card" style={{ padding: 16 }}>
+          {phaseRows.map(x => <div key={x.p} style={{ marginBottom: 12 }}>
+            <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
+              <span style={{ fontSize: 13 }}>{x.p}</span>
+              <span className="mono" style={{ fontSize: 13 }}>{fmtHM(x.mins)}</span></div>
+            <Bar value={x.mins} total={mins} /></div>)}
+        </div>
+      </div>}
+
+      <div className="slate" style={{ marginBottom: 8 }}>Sessions</div>
+      <div className="card">
+        {!sessions.length && <div className="slate" style={{ padding: 16 }}>Nothing logged yet — use Add time</div>}
+        {sessions.map(s => {
+          const dl = dls.find(x => x.id === s.deliverableId);
+          return <div key={s.id} className="item">
+            <div style={{ width: 4, alignSelf: "stretch",
+              background: "rgba(20,20,20," + (INTENSITY[s.intensity]||INTENSITY[3]).alpha + ")" }} />
+            <button className="plain flex1" onClick={() => onEditSession(s)}>
+              <div className="truncate" style={{ fontSize: 14 }}>{s.phase}{dl ? " · " + dl.name : ""}</div>
+              <div className="slate truncate" style={{ marginTop: 3 }}>{s.date}{s.note ? " · " + s.note : ""}</div>
+            </button>
+            <div className="mono" style={{ fontSize: 15 }}>{fmtHM(s.minutes)}</div>
+            <button className="link" onClick={() => onEditSession(s)}>Edit</button>
+          </div>;
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ============================== Track view =========================== */
+
+function TrackView({ data, itemById, clientById, onManual, onEditSession }) {
+  const [day, setDay] = useState(todayKey());
+  const ds = data.sessions.filter(s => s.date === day)
+    .sort((a,b) => (a.updatedAt||"").localeCompare(b.updatedAt||""));
+  const total = ds.reduce((a,s) => a+s.minutes, 0);
+
+  return (
+    <div>
+      <button className="btn" style={{ width: "100%", marginBottom: 18 }} onClick={onManual}>Enter time manually</button>
+      <div className="row" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+        <div className="slate">Day strip</div>
+        <div className="row gap" style={{ alignItems: "center" }}>
+          <input type="date" className="input mono" style={{ width: "auto", padding: "6px 8px", fontSize: 13 }}
+            value={day} onChange={e => setDay(e.target.value)} />
+          <span className="mono" style={{ fontSize: 14 }}>{fmtHM(total)}</span>
+        </div>
+      </div>
+      <div className="strip" style={{ marginBottom: 16 }}>
+        {!ds.length && <div className="slate" style={{ width:"100%", display:"flex",
+          alignItems:"center", justifyContent:"center" }}>Nothing logged</div>}
+        {ds.map(s => { const it = itemById(s.itemId) || {};
+          return <div key={s.id} className="block" title={it.name + " · " + s.phase + " · " + fmtHM(s.minutes)}
+            style={{ flexGrow: s.minutes, flexBasis: 0,
+              background: "rgba(20,20,20," + (INTENSITY[s.intensity]||INTENSITY[3]).alpha + ")" }} />; })}
+      </div>
+      <div className="card">
+        {!ds.length && <div className="slate" style={{ padding: 16 }}>No sessions on this day</div>}
+        {ds.map(s => {
+          const it = itemById(s.itemId) || { name: "Deleted item" };
+          const cl = clientById(it.clientId);
+          const dl = (it.deliverables||[]).find(x => x.id === s.deliverableId);
+          return <div key={s.id} className="item">
+            <div style={{ width: 4, alignSelf: "stretch",
+              background: "rgba(20,20,20," + (INTENSITY[s.intensity]||INTENSITY[3]).alpha + ")" }} />
+            <button className="plain flex1" onClick={() => onEditSession(s)}>
+              <div className="truncate" style={{ fontSize: 15 }}>{it.name}
+                {cl && <span className="slate" style={{ marginLeft: 6 }}>{cl.name}</span>}</div>
+              <div className="slate truncate" style={{ marginTop: 3 }}>
+                {s.phase}{dl ? " · " + dl.name : ""}{s.note ? " · " + s.note : ""}</div>
+            </button>
+            <div className="mono" style={{ fontSize: 15 }}>{fmtHM(s.minutes)}</div>
+            <button className="link" onClick={() => onEditSession(s)}>Edit</button>
+          </div>;
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ============================= Review view =========================== */
+
+function ReviewView({ data, itemById, clientById }) {
+  const [tab, setTab] = useState("time");
+  if (!data.sessions.length)
+    return <div className="card slate" style={{ padding: 26, textAlign: "center" }}>Log a few sessions and this fills in</div>;
+  return (
+    <div>
+      <div className="subseg" style={{ marginBottom: 16 }}>
+        {[["time","Time"],["jobs","Jobs"],["clients","Clients"]].map(([id,label]) =>
+          <button key={id} className={tab===id?"on":""} onClick={() => setTab(id)}>{label}</button>)}
+      </div>
+      {tab === "time"    && <ReviewTime data={data} itemById={itemById} />}
+      {tab === "jobs"    && <ReviewJobs data={data} clientById={clientById} />}
+      {tab === "clients" && <ReviewClients data={data} />}
+    </div>
+  );
+}
+
+function ReviewTime({ data, itemById }) {
+  const [month, setMonth] = useState(todayKey().slice(0,7));
+  const ms = data.sessions.filter(s => monthKey(s.date) === month);
+  const total = ms.reduce((a,s) => a+s.minutes, 0);
+  const byType = TYPES.map(t => ({ ...t,
+    mins: ms.filter(s => (itemById(s.itemId)||{}).type === t.id).reduce((a,s)=>a+s.minutes,0) }));
+  const paid = byType.find(t => t.id === "paid").mins;
+  const avgI = total ? ms.reduce((a,s) => a + (s.intensity||3)*s.minutes, 0) / total : 0;
+
+  const weeks = [];
+  for (let w = 7; w >= 0; w--) {
+    const end = new Date(); end.setDate(end.getDate() - w*7);
+    const start = new Date(end); start.setDate(start.getDate() - 6);
+    weeks.push({ label: todayKey(end).slice(5),
+      mins: data.sessions.filter(s => { const d = new Date(s.date); return d >= start && d <= end; })
+        .reduce((a,s) => a+s.minutes, 0) });
+  }
+  const wMax = Math.max(1, ...weeks.map(w => w.mins));
+
+  const ps = data.sessions.filter(s => (itemById(s.itemId)||{}).type === "paid");
+  const pTotal = ps.reduce((a,s) => a+s.minutes, 0);
+  const phaseRows = PHASES.map(p => ({ p, mins: ps.filter(s => s.phase===p).reduce((a,s)=>a+s.minutes,0) }))
+    .filter(r => r.mins > 0).sort((a,b) => b.mins - a.mins);
+
+  return (
+    <div>
+      <div className="row" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <div className="slate">Month</div>
+        <input type="month" className="input mono" style={{ width: "auto", padding: "6px 8px", fontSize: 13 }}
+          value={month} onChange={e => setMonth(e.target.value)} />
+      </div>
+      <div className="card" style={{ padding: 16, marginBottom: 20 }}>
+        <div className="row gap" style={{ alignItems: "baseline", marginBottom: 4 }}>
+          <span className="mono" style={{ fontSize: 34, lineHeight: 1, letterSpacing: "-.03em" }}>{fmtHM(total)}</span>
+          <span className="slate">logged</span>
+        </div>
+        <div className="slate" style={{ marginBottom: 16 }}>
+          {total ? Math.round(((total-paid)/total)*100) + "% unpaid · average intensity " + avgI.toFixed(1) : "—"}
+        </div>
+        {byType.map(t => <div key={t.id} style={{ marginBottom: 12 }}>
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
+            <span style={{ fontSize: 13 }}>{t.label}</span>
+            <span className="mono" style={{ fontSize: 13 }}>{fmtHM(t.mins)}
+              <span className="slate" style={{ marginLeft: 6 }}>{total ? Math.round((t.mins/total)*100) : 0}%</span></span>
+          </div>
+          <Bar value={t.mins} total={total} muted={t.id !== "paid"} />
+        </div>)}
+      </div>
+
+      <div className="slate" style={{ marginBottom: 8 }}>Weekly load · last 8 weeks</div>
+      <div className="card" style={{ padding: 16, marginBottom: 20 }}>
+        <div className="row gap" style={{ alignItems: "flex-end", height: 90 }}>
+          {weeks.map((w,i) => <div key={i} className="flex1" style={{ display:"flex",
+            flexDirection:"column", justifyContent:"flex-end", alignItems:"center" }}>
+            <div title={fmtHM(w.mins)} style={{ width:"100%", height:(w.mins/wMax)*74+"px",
+              background:"var(--ink)", minHeight: w.mins?2:0 }} />
+            <div className="slate" style={{ marginTop:6, fontSize:9 }}>{w.label}</div>
+          </div>)}
+        </div>
+        <div className="slate" style={{ marginTop: 12 }}>Peak {fmtHM(wMax)} · average {fmtHM(weeks.reduce((a,w)=>a+w.mins,0)/weeks.length)}</div>
+      </div>
+
+      {phaseRows.length > 0 && <div>
+        <div className="slate" style={{ marginBottom: 8 }}>Phase mix · all paid work</div>
+        <div className="card" style={{ padding: 16 }}>
+          {phaseRows.map(r => <div key={r.p} style={{ marginBottom: 12 }}>
+            <div className="row" style={{ justifyContent:"space-between", alignItems:"baseline", marginBottom:4 }}>
+              <span style={{ fontSize: 13 }}>{r.p}</span>
+              <span className="mono" style={{ fontSize: 13 }}>{Math.round((r.mins/pTotal)*100)}%</span></div>
+            <Bar value={r.mins} total={pTotal} /></div>)}
+          <div className="slate">Use these ratios to sanity-check your next quotation</div>
+        </div>
+      </div>}
+    </div>
+  );
+}
+
+function ReviewJobs({ data, clientById }) {
+  const [open, setOpen] = useState(null);
+  const target = Number(data.settings.targetRate) || null;
+  const rows = data.items.map(i => {
+    const ss = data.sessions.filter(s => s.itemId === i.id);
+    const mins = ss.reduce((a,s) => a+s.minutes, 0);
+    return { item: i, sessions: ss, mins, rate: i.fee && mins ? Number(i.fee)/(mins/60) : null };
+  }).filter(r => r.mins > 0).sort((a,b) => b.mins - a.mins);
+
+  const groups = {};
+  data.items.forEach(i => {
+    const dls = i.deliverables || [];
+    dls.forEach(d => {
+      const mins = data.sessions.filter(s => s.itemId === i.id &&
+        (s.deliverableId === d.id || (!s.deliverableId && dls.length === 1)))
+        .reduce((a,s) => a+s.minutes, 0);
+      if (mins > 0) (groups[d.name] = groups[d.name] || []).push(mins);
+    });
+  });
+
+  return (
+    <div>
+      <div className="slate" style={{ marginBottom: 8 }}>Every job with time on it</div>
+      <div className="card" style={{ marginBottom: 20 }}>
+        {rows.map(r => {
+          const cl = clientById(r.item.clientId), isOpen = open === r.item.id;
+          const phaseRows = PHASES.map(p => ({ p, mins: r.sessions.filter(s => s.phase===p).reduce((a,s)=>a+s.minutes,0) }))
+            .filter(x => x.mins > 0).sort((a,b) => b.mins - a.mins);
+          return <div key={r.item.id} style={{ borderBottom: "1px solid var(--line)" }}>
+            <button className="plain" style={{ width:"100%", display:"flex", alignItems:"center",
+              gap:10, padding:13 }} onClick={() => setOpen(isOpen ? null : r.item.id)}>
+              <div className="flex1">
+                <div className="truncate" style={{ fontSize: 15 }}>{r.item.name}</div>
+                <div className="slate truncate" style={{ marginTop: 3 }}>
+                  {(TYPES.find(t => t.id === r.item.type)||{}).label}{cl ? " · " + cl.name : ""}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div className="mono" style={{ fontSize: 15 }}>{fmtHM(r.mins)}</div>
+                {r.rate && <div className="mono" style={{ fontSize: 11,
+                  color: target && r.rate < target ? "var(--tally)" : "var(--soft)" }}>{fmtHKD(r.rate)}/h</div>}
+              </div>
+              <span className="slate">{isOpen ? "−" : "+"}</span>
+            </button>
+            {isOpen && <div style={{ padding: 16, background: "#fafafa", borderTop: "1px solid var(--line)" }}>
+              {phaseRows.map(x => <div key={x.p} style={{ marginBottom: 10 }}>
+                <div className="row" style={{ justifyContent:"space-between", alignItems:"baseline", marginBottom:4 }}>
+                  <span style={{ fontSize: 12 }}>{x.p}</span>
+                  <span className="mono" style={{ fontSize: 12 }}>{fmtHM(x.mins)}</span></div>
+                <Bar value={x.mins} total={r.mins} /></div>)}
+            </div>}
+          </div>;
+        })}
+      </div>
+
+      {Object.keys(groups).length > 0 && <div>
+        <div className="slate" style={{ marginBottom: 8 }}>Hours per deliverable · across all jobs</div>
+        <div className="card">
+          {Object.entries(groups).map(([name, list]) =>
+            <div key={name} className="item">
+              <div className="flex1">
+                <div style={{ fontSize: 15 }}>{name}</div>
+                <div className="slate" style={{ marginTop: 3 }}>{list.length} {list.length===1?"time":"times"}
+                  {list.length > 1 && " · " + fmtHM(Math.min(...list)) + "–" + fmtHM(Math.max(...list))}</div>
+              </div>
+              <div className="mono" style={{ fontSize: 15 }}>{fmtHM(median(list))}
+                <span className="slate" style={{ marginLeft: 6 }}>median</span></div>
+            </div>)}
+        </div>
+      </div>}
+    </div>
+  );
+}
+
+function ReviewClients({ data }) {
+  const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 12);
+  const ledger = data.clients.map(c => {
+    const items = data.items.filter(i => i.clientId === c.id);
+    const ids = items.map(i => i.id);
+    const rel = data.sessions.filter(s => ids.includes(s.itemId) && new Date(s.date) >= cutoff);
+    const mins = rel.reduce((a,s) => a+s.minutes, 0);
+    const paidIds = items.filter(i => i.type === "paid").map(i => i.id);
+    const paidMins = rel.filter(s => paidIds.includes(s.itemId)).reduce((a,s) => a+s.minutes, 0);
+    const revenue = items.filter(i => i.type === "paid").reduce((a,i) => a + (Number(i.fee)||0), 0);
+    return { client: c, mins, paidMins, unpaidMins: mins - paidMins, revenue };
+  }).filter(r => r.mins > 0 || r.revenue > 0).sort((a,b) => b.mins - a.mins);
+
+  const bniItems = data.items.filter(i => i.bni);
+  const bniMins = data.sessions.filter(s => bniItems.some(i => i.id === s.itemId)).reduce((a,s) => a+s.minutes, 0);
+  const bniClients = data.clients.filter(c => c.source === "BNI referral");
+  const bniRevenue = data.items.filter(i => i.type === "paid" && bniClients.some(c => c.id === i.clientId))
+    .reduce((a,i) => a + (Number(i.fee)||0), 0);
+
+  return (
+    <div>
+      {!ledger.length ? <div className="card slate" style={{ padding: 26, textAlign: "center" }}>No client time logged yet</div>
+      : <div style={{ marginBottom: 20 }}>
+        <div className="slate" style={{ marginBottom: 8 }}>Client ledger · trailing 12 months</div>
+        <div className="card">{ledger.map(r =>
+          <div key={r.client.id} style={{ padding: 13, borderBottom: "1px solid var(--line)" }}>
+            <div className="row gap" style={{ alignItems: "center", marginBottom: 8 }}>
+              <div className="flex1">
+                <div className="truncate" style={{ fontSize: 15 }}>{r.client.name}</div>
+                <div className="slate" style={{ marginTop: 3 }}>{r.client.source}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div className="mono" style={{ fontSize: 14 }}>{fmtHM(r.mins)}</div>
+                <div className="slate">{fmtHKD(r.revenue)}</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", height: 8 }}>
+              <div style={{ flexGrow: r.paidMins, background: "var(--ink)" }} />
+              <div style={{ flexGrow: r.unpaidMins, background: "var(--soft)" }} />
+            </div>
+            <div className="slate" style={{ marginTop: 5 }}>{fmtHM(r.paidMins)} paid · {fmtHM(r.unpaidMins)} unpaid</div>
+          </div>)}
+        </div>
+      </div>}
+
+      {(bniMins > 0 || bniRevenue > 0) && <div>
+        <div className="slate" style={{ marginBottom: 8 }}>BNI return</div>
+        <div className="card" style={{ padding: 16 }}>
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+            <span style={{ fontSize: 13 }}>Hours invested</span>
+            <span className="mono">{fmtHM(bniMins)}</span></div>
+          <div className="rule" style={{ margin: "10px 0" }} />
+          <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+            <span style={{ fontSize: 13 }}>Revenue from BNI-sourced clients</span>
+            <span className="mono">{fmtHKD(bniRevenue)}</span></div>
+          {bniMins > 0 && <div className="slate" style={{ marginTop: 12 }}>
+            {fmtHKD(bniRevenue/(bniMins/60))} per hour invested, before the membership fee</div>}
+        </div>
+      </div>}
+    </div>
+  );
+}
+
+/* ================================ modals ============================= */
+
+function Modals({ modal, data, raw, conf, setConf, sync, runSync, close, update, stamp,
+  commitSession, saveSessionEdit, deleteSession, startTimer, buildJSON, runExport, importJSON, setToast }) {
+
+  const [form, setForm] = useState(() => {
+    if (modal.kind === "item")
+      return modal.item ? { ...modal.item, deliverables: [...(modal.item.deliverables||[])] }
+        : { name:"", type:"paid", clientId:"", fee:"", deliverables:[], bni:false, status:"active" };
+    if (modal.kind === "client") return modal.client || { name:"", source:SOURCES[0] };
+    if (modal.kind === "log") {
+      if (modal.editSession) { const e = modal.editSession;
+        return { itemId:e.itemId, phase:e.phase, deliverableId:e.deliverableId||"",
+          hours:String(Math.round((e.minutes/60)*100)/100), date:e.date, intensity:e.intensity||3, note:e.note||"" }; }
+      if (modal.preset) return { ...modal.preset, hours:String(Math.round((modal.preset.minutes/60)*100)/100) };
+      return { itemId: modal.lockedItem ? modal.lockedItem.id : "", phase:PHASES[0],
+        deliverableId:"", hours:"", date:todayKey(), intensity:3, note:"" };
+    }
+    if (modal.kind === "start") return { phase:PHASES[0], deliverableId:"" };
+    if (modal.kind === "settings") return { targetRate: data.settings.targetRate || "", ...conf };
+    return {};
+  });
+  const set = (k,v) => setForm(f => ({ ...f, [k]: v }));
+
+  const saveItem = () => {
+    if (!form.name.trim()) return;
+    const clean = { ...form, deliverables: (form.deliverables||[]).filter(d => d.name.trim()) };
+    const newId = uid();
+    const makes = clean.clientId === "__new" && (clean.newClientName||"").trim();
+    clean.clientId = makes ? newId : (clean.clientId === "__new" ? "" : clean.clientId);
+    const nm = clean.newClientName, src = clean.newClientSource || SOURCES[0];
+    delete clean.newClientName; delete clean.newClientSource;
+    update(d => {
+      if (makes) d.clients = [...d.clients, stamp({ id:newId, name:nm.trim(), source:src })];
+      if (modal.item) d.items = d.items.map(i => i.id === modal.item.id ? stamp({ ...i, ...clean }) : i);
+      else d.items = [...d.items, stamp({ ...clean, id: uid() })];
+      return d;
+    });
+    close();
+  };
+
+  const saveClient = () => {
+    if (!form.name.trim()) return;
+    update(d => {
+      if (modal.client) d.clients = d.clients.map(c => c.id === modal.client.id ? stamp({ ...c, ...form }) : c);
+      else d.clients = [...d.clients, stamp({ ...form, id: uid() })];
+      return d;
+    });
+    close();
+  };
+
+  const logItem = modal.kind === "log"
+    ? (modal.editSession ? data.items.find(i => i.id === form.itemId)
+       : modal.lockedItem || data.items.find(i => i.id === form.itemId)) : null;
+  const logDls = (logItem && logItem.deliverables) || [];
+  const startDls = (modal.item && modal.item.deliverables) || [];
+  const payload = () => ({ itemId:form.itemId, phase:form.phase, deliverableId:form.deliverableId,
+    minutes: Math.round(Number(form.hours)*60), date:form.date, intensity:form.intensity, note:form.note });
+  const canSave = form.itemId && Number(form.hours) > 0;
+
+  return (
+    <div className="overlay" onClick={e => e.target === e.currentTarget && close()}>
+      <div className="modal">
+
+        {modal.kind === "item" && <div>
+          <div className="slate" style={{ marginBottom: 14 }}>{modal.item ? "Edit work item" : "New work item"}</div>
+          <Field label="Name"><input className="input" value={form.name} autoFocus
+            onChange={e => set("name", e.target.value)} placeholder="e.g. Hactl HSCS Video" /></Field>
+          <Field label="Type"><select className="select" value={form.type} onChange={e => set("type", e.target.value)}>
+            {TYPES.map(t => <option key={t.id} value={t.id}>{t.label} — {t.note}</option>)}</select></Field>
+          <Field label="Client"><select className="select" value={form.clientId} onChange={e => set("clientId", e.target.value)}>
+            <option value="">No client</option>
+            {data.clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            <option value="__new">+ Add a new client…</option></select></Field>
+          {form.clientId === "__new" && <div style={{ padding: 12, marginBottom: 14, background: "#fafafa", border: "1px solid var(--line)" }}>
+            <Field label="New client name"><input className="input" value={form.newClientName||""}
+              onChange={e => set("newClientName", e.target.value)} placeholder="e.g. Tri-L Picture" /></Field>
+            <Field label="How they found you"><select className="select" value={form.newClientSource||SOURCES[0]}
+              onChange={e => set("newClientSource", e.target.value)}>
+              {SOURCES.map(x => <option key={x}>{x}</option>)}</select></Field>
+            <div className="slate">Created when you save this job</div>
+          </div>}
+          {form.type === "paid" && <Field label="Fee (HKD, optional)">
+            <input className="input mono" value={form.fee} inputMode="numeric"
+              onChange={e => set("fee", e.target.value)} placeholder="45000" /></Field>}
+          <Field label="Deliverables — one line each">
+            {(form.deliverables||[]).map((d,idx) => <div key={d.id} className="row gap" style={{ marginBottom: 8 }}>
+              <input className="input" value={d.name} placeholder="e.g. 30s TVC cut"
+                onChange={e => { const n = [...form.deliverables]; n[idx] = { ...n[idx], name: e.target.value };
+                  set("deliverables", n); }} />
+              <button className="btn btn-ghost" onClick={() => set("deliverables",
+                form.deliverables.filter((_,i) => i !== idx))}>✕</button>
+            </div>)}
+            <button className="btn btn-ghost" style={{ width: "100%" }}
+              onClick={() => set("deliverables", [...(form.deliverables||[]), { id: uid(), name: "" }])}>
+              + Add deliverable</button>
+          </Field>
+          <Field label="Status"><select className="select" value={form.status||"active"}
+            onChange={e => set("status", e.target.value)}>
+            <option value="active">Ongoing</option><option value="done">Completed</option></select></Field>
+          <label className="row gap" style={{ alignItems: "center", marginBottom: 16, fontSize: 14 }}>
+            <input type="checkbox" checked={!!form.bni} onChange={e => set("bni", e.target.checked)} />
+            Counts as BNI activity</label>
+          <div className="row gap">
+            <button className="btn flex1" onClick={saveItem}>Save</button>
+            <button className="btn btn-ghost" onClick={close}>Cancel</button>
+            {modal.item && <button className="btn btn-ghost" onClick={() => {
+              if (!window.confirm("Delete this job and its logged time?")) return;
+              update(d => {
+                d.items = d.items.map(i => i.id === modal.item.id ? stamp({ ...i, deleted: true }) : i);
+                d.sessions = d.sessions.map(s => s.itemId === modal.item.id ? stamp({ ...s, deleted: true }) : s);
+                return d; });
+              close();
+            }}>Delete</button>}
+          </div>
+        </div>}
+
+        {modal.kind === "client" && <div>
+          <div className="slate" style={{ marginBottom: 14 }}>{modal.client ? "Edit client" : "New client"}</div>
+          <Field label="Name"><input className="input" value={form.name} autoFocus
+            onChange={e => set("name", e.target.value)} /></Field>
+          <Field label="How they found you"><select className="select" value={form.source}
+            onChange={e => set("source", e.target.value)}>{SOURCES.map(s => <option key={s}>{s}</option>)}</select></Field>
+          <div className="row gap">
+            <button className="btn flex1" onClick={saveClient}>Save</button>
+            <button className="btn btn-ghost" onClick={close}>Cancel</button>
+          </div>
+          {modal.client && <div className="rule" style={{ marginTop: 16, paddingTop: 16 }}>
+            <button className="btn btn-ghost" style={{ width: "100%" }} onClick={() => {
+              const used = data.items.filter(i => i.clientId === modal.client.id).length;
+              if (used && !window.confirm(used + " job(s) point at this client. They keep their time but lose the client. Continue?")) return;
+              update(d => {
+                d.clients = d.clients.map(c => c.id === modal.client.id ? stamp({ ...c, deleted: true }) : c);
+                d.items = d.items.map(i => i.clientId === modal.client.id ? stamp({ ...i, clientId: "" }) : i);
+                return d; });
+              close();
+            }}>Delete client</button>
+            <div className="slate" style={{ marginTop: 8 }}>Jobs and logged time are kept</div>
+          </div>}
+        </div>}
+
+        {modal.kind === "start" && <div>
+          <div className="slate" style={{ marginBottom: 6 }}>Start timer</div>
+          <div style={{ fontSize: 16, marginBottom: 16 }}>{modal.item.name}</div>
+          <Field label="What kind of work"><select className="select" value={form.phase}
+            onChange={e => set("phase", e.target.value)}>{PHASES.map(p => <option key={p}>{p}</option>)}</select></Field>
+          {startDls.length > 0 && <Field label="Deliverable (optional)">
+            <select className="select" value={form.deliverableId} onChange={e => set("deliverableId", e.target.value)}>
+              <option value="">Not specific</option>
+              {startDls.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></Field>}
+          <div className="row gap">
+            <button className="btn tally flex1" onClick={() => {
+              startTimer(modal.item.id, form.phase, form.deliverableId); close(); }}>Start recording</button>
+            <button className="btn btn-ghost" onClick={close}>Cancel</button>
+          </div>
+        </div>}
+
+        {modal.kind === "log" && <div>
+          <div className="slate" style={{ marginBottom: 14 }}>{modal.title}</div>
+          {modal.lockedItem && !modal.editSession
+            ? <div style={{ padding: 12, marginBottom: 14, background: "#fafafa", border: "1px solid var(--line)" }}>
+                <div className="slate" style={{ marginBottom: 4 }}>Work item</div>
+                <div style={{ fontSize: 15 }}>{modal.lockedItem.name}</div></div>
+            : <Field label="Work item"><select className="select" value={form.itemId}
+                onChange={e => { set("itemId", e.target.value); set("deliverableId", ""); }}>
+                <option value="">Choose…</option>
+                {data.items.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}</select></Field>}
+          <Field label="What kind of work"><select className="select" value={form.phase}
+            onChange={e => set("phase", e.target.value)}>{PHASES.map(p => <option key={p}>{p}</option>)}</select></Field>
+          {logDls.length > 0 && <Field label="Deliverable (optional)">
+            <select className="select" value={form.deliverableId} onChange={e => set("deliverableId", e.target.value)}>
+              <option value="">Not specific</option>
+              {logDls.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}</select></Field>}
+          <Field label="Hours">
+            <input className="input mono" value={form.hours} inputMode="decimal" placeholder="e.g. 4 or 1.5"
+              onChange={e => set("hours", e.target.value)} />
+            <div className="row gap" style={{ marginTop: 8, flexWrap: "wrap" }}>
+              {[1,2,3,4,6,8,9].map(h => <button key={h} className="chip" onClick={() => set("hours", String(h))}>{h}h</button>)}
+            </div>
+          </Field>
+          <Field label="Date">
+            <input type="date" className="input mono" value={form.date} onChange={e => set("date", e.target.value)} />
+            <div className="row gap" style={{ marginTop: 8, flexWrap: "wrap" }}>
+              {[["Today",0],["Yesterday",1],["2 days ago",2],["3 days ago",3],["A week ago",7]].map(([l,b]) =>
+                <button key={l} className="chip" onClick={() => { const d = new Date();
+                  d.setDate(d.getDate()-b); set("date", todayKey(d)); }}>{l}</button>)}
+            </div>
+          </Field>
+          <Field label="How heavy was it">
+            <div className="row" style={{ gap: 4 }}>
+              {[1,2,3,4,5].map(n => <button key={n} className="flex1" onClick={() => set("intensity", n)}
+                style={{ padding:"12px 0", border: form.intensity===n ? "1px solid #141414" : "1px solid #dcdcdc",
+                  background:"rgba(20,20,20," + INTENSITY[n].alpha + ")", color: n>=3?"#fff":"#141414",
+                  fontSize:10, cursor:"pointer", fontFamily:"ui-monospace, Menlo, monospace",
+                  letterSpacing:".05em", textTransform:"uppercase" }}>{INTENSITY[n].label}</button>)}
+            </div>
+          </Field>
+          <Field label="Note (optional)"><input className="input" value={form.note}
+            onChange={e => set("note", e.target.value)} placeholder="What actually happened" /></Field>
+          <div className="row gap">
+            <button className="btn flex1" disabled={!canSave} onClick={() => {
+              if (modal.editSession) saveSessionEdit(modal.editSession.id, payload());
+              else commitSession(payload(), modal.fromTimer); }}>
+              {modal.editSession ? "Save changes" : "Log it"}</button>
+            <button className="btn btn-ghost" onClick={close}>Cancel</button>
+          </div>
+          {!modal.fromTimer && !modal.editSession &&
+            <button className="btn btn-ghost" style={{ width:"100%", marginTop: 8 }} disabled={!canSave}
+              onClick={() => { commitSession(payload(), false, true); setForm(f => ({ ...f, hours:"", note:"" })); }}>
+              Log it and add another</button>}
+          {modal.editSession && <div className="rule" style={{ marginTop: 16, paddingTop: 16 }}>
+            <button className="btn btn-ghost" style={{ width: "100%" }}
+              onClick={() => { deleteSession(modal.editSession.id); close(); }}>Delete this session</button>
+          </div>}
+        </div>}
+
+        {modal.kind === "settings" && <div>
+          <div className="slate" style={{ marginBottom: 14 }}>Settings</div>
+          <Field label="Target hourly rate (HKD)">
+            <input className="input mono" value={form.targetRate} inputMode="numeric"
+              onChange={e => set("targetRate", e.target.value)} placeholder="800" /></Field>
+          <button className="btn" style={{ width: "100%" }} onClick={() => {
+            update(d => { d.settings = { ...d.settings, targetRate: form.targetRate, updatedAt: nowISO() }; return d; });
+            setToast("Saved"); }}>Save rate</button>
+
+          <div className="rule" style={{ marginTop: 20, paddingTop: 16 }}>
+            <div className="slate" style={{ marginBottom: 10 }}>GitHub sync</div>
+            <Field label="Repository (owner/name)">
+              <input className="input mono" value={form.repo||""} autoCapitalize="off" autoCorrect="off"
+                onChange={e => set("repo", e.target.value.trim())} placeholder="yourname/time-ledger-data" /></Field>
+            <Field label="File path">
+              <input className="input mono" value={form.path||"ledger.json"} autoCapitalize="off" autoCorrect="off"
+                onChange={e => set("path", e.target.value.trim())} /></Field>
+            <Field label="Access token">
+              <input className="input mono" type="password" value={form.token||""} autoCapitalize="off" autoCorrect="off"
+                onChange={e => set("token", e.target.value.trim())} placeholder="github_pat_…" />
+              <div className="slate" style={{ marginTop: 6 }}>Stored on this device only</div>
+            </Field>
+            <div className="row gap">
+              <button className="btn flex1" onClick={() => {
+                setConf({ repo: form.repo||"", path: form.path||"ledger.json", token: form.token||"" });
+                setToast("Saved — syncing"); }}>Save sync settings</button>
+              <button className="btn btn-ghost" disabled={sync.busy} onClick={() => runSync(false)}>
+                {sync.busy ? "…" : "Sync now"}</button>
+            </div>
+            <div className="slate" style={{ marginTop: 10 }}>
+              Last sync {ago(sync.at)}{sync.error ? " · " + sync.error : ""}</div>
+          </div>
+
+          <div className="rule" style={{ marginTop: 20, paddingTop: 16 }}>
+            <div className="slate" style={{ marginBottom: 10 }}>Manual backup</div>
+            <div className="row gap">
+              <button className="btn btn-ghost flex1" onClick={runExport}>Download JSON + CSV</button>
+              <label className="btn btn-ghost" style={{ cursor: "pointer" }}>
+                Import
+                <input type="file" accept=".json" style={{ display: "none" }} onChange={e => {
+                  const f = e.target.files[0]; if (!f) return;
+                  const r = new FileReader();
+                  r.onload = () => { importJSON(r.result); close(); };
+                  r.readAsText(f);
+                }} />
+              </label>
+            </div>
+            <div className="slate" style={{ marginTop: 10 }}>
+              {data.sessions.length} sessions · {data.items.length} work items</div>
+          </div>
+
+          <button className="btn btn-ghost" style={{ width: "100%", marginTop: 20 }} onClick={close}>Close</button>
+        </div>}
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
