@@ -229,6 +229,14 @@ function b64decode(b64) {
   return new TextDecoder().decode(bytes);
 }
 
+/* people paste the whole URL; accept it and reduce to owner/name */
+function normalizeRepo(v) {
+  return (v || "").trim()
+    .replace(/^https?:\/\/(www\.)?github\.com\//i, "")
+    .replace(/\.git$/i, "")
+    .replace(/^\/+|\/+$/g, "");
+}
+
 function ghHeaders(token) {
   return {
     "Authorization": "Bearer " + token,
@@ -241,11 +249,20 @@ function ghHeaders(token) {
    cache:"no-store" plus the API endpoint avoids the 5-minute raw cache.  */
 async function ghRead(conf) {
   const url = "https://api.github.com/repos/" + conf.repo + "/contents/" +
-              encodeURIComponent(conf.path) + "?ref=main&t=" + Date.now();
+              encodeURIComponent(conf.path) + "?t=" + Date.now();
   const res = await fetch(url, { headers: ghHeaders(conf.token), cache: "no-store" });
-  if (res.status === 404) return { data: null, sha: null };
-  if (res.status === 401) throw new Error("Token rejected — check it hasn't expired");
-  if (res.status === 403) throw new Error("Access denied — token lacks Contents permission on this repo");
+  if (res.status === 404) {
+    /* Could be "file not created yet" or "token can't see this repo".
+       Ask about the repo itself to tell them apart. */
+    const probe = await fetch("https://api.github.com/repos/" + conf.repo,
+      { headers: ghHeaders(conf.token), cache: "no-store" });
+    if (probe.status === 404)
+      throw new Error("Can't see repo \"" + conf.repo + "\" — check the name, and that the token lists this repo");
+    if (!probe.ok) throw new Error("Repo check failed (" + probe.status + ")");
+    return { data: null, sha: null };
+  }
+  if (res.status === 401) throw new Error("Token rejected — expired, or copied incompletely");
+  if (res.status === 403) throw new Error("Access denied — token lacks Contents: Read and write");
   if (!res.ok) throw new Error("Read failed (" + res.status + ")");
   const json = await res.json();
   return { data: JSON.parse(b64decode(json.content)), sha: json.sha };
@@ -267,8 +284,52 @@ async function ghSync(conf, localData) {
   );
   if (res.status === 409 || res.status === 422)
     throw new Error("The file changed mid-save — press sync again");
+  if (res.status === 404)
+    throw new Error("Write refused. The token can read but not write, or doesn't list this repo. " +
+      "Check Contents = Read and write, and that " + conf.repo + " is selected on the token.");
+  if (res.status === 403)
+    throw new Error("Write forbidden — token needs Contents: Read and write");
   if (!res.ok) throw new Error("Write failed (" + res.status + ")");
   return merged;
+}
+
+/* Checks each link in the chain and reports the first thing that's wrong. */
+async function ghDiagnose(conf) {
+  const out = [];
+  const repo = normalizeRepo(conf.repo);
+  if (!conf.token) return ["No token entered."];
+  if (!repo) return ["No repository entered."];
+
+  const who = await fetch("https://api.github.com/user",
+    { headers: ghHeaders(conf.token), cache: "no-store" });
+  if (who.status === 401) return ["Token is not valid. It may have expired, or been copied incompletely."];
+  if (!who.ok) return ["Couldn't reach GitHub (" + who.status + ")."];
+  const user = await who.json();
+  out.push("Token belongs to " + user.login + ".");
+
+  if (repo.split("/").length !== 2)
+    return out.concat(["Repository should look like " + user.login + "/time-ledger-data."]);
+
+  const r = await fetch("https://api.github.com/repos/" + repo,
+    { headers: ghHeaders(conf.token), cache: "no-store" });
+  if (r.status === 404)
+    return out.concat([
+      "Can't see " + repo + ".",
+      "Either the name is wrong, or this token doesn't list that repository.",
+      "Fix: token settings, Repository access, select " + repo + ".",
+    ]);
+  if (!r.ok) return out.concat(["Repo check failed (" + r.status + ")."]);
+  const info = await r.json();
+  out.push("Repo found" + (info.private ? " (private)" : " (public)") + ", default branch " + info.default_branch + ".");
+
+  const canWrite = info.permissions && info.permissions.push;
+  if (!canWrite)
+    return out.concat([
+      "Token can read this repo but not write to it.",
+      "Fix: token settings, Permissions, Contents = Read and write.",
+    ]);
+  out.push("Write permission present. Sync should work — press Sync now.");
+  return out;
 }
 
 /* ============================ small pieces =========================== */
@@ -988,6 +1049,8 @@ function Modals({ modal, data, raw, conf, setConf, sync, runSync, close, update,
     return {};
   });
   const set = (k,v) => setForm(f => ({ ...f, [k]: v }));
+  const [checking, setChecking] = useState(false);
+  const [report, setReport] = useState(null);
 
   const saveItem = () => {
     if (!form.name.trim()) return;
@@ -1205,11 +1268,28 @@ function Modals({ modal, data, raw, conf, setConf, sync, runSync, close, update,
             </Field>
             <div className="row gap">
               <button className="btn flex1" onClick={() => {
-                setConf({ repo: form.repo||"", path: form.path||"ledger.json", token: form.token||"" });
+                setConf({ repo: normalizeRepo(form.repo), path: (form.path||"ledger.json").trim(),
+                  token: (form.token||"").trim() });
                 setToast("Saved — syncing"); }}>Save sync settings</button>
               <button className="btn btn-ghost" disabled={sync.busy} onClick={() => runSync(false)}>
                 {sync.busy ? "…" : "Sync now"}</button>
             </div>
+
+            <button className="btn btn-ghost" style={{ width: "100%", marginTop: 8 }}
+              disabled={checking} onClick={async () => {
+                setChecking(true); setReport(["Checking…"]);
+                try {
+                  const lines = await ghDiagnose({ repo: normalizeRepo(form.repo), token: (form.token||"").trim() });
+                  setReport(lines);
+                } catch (e) { setReport(["Check failed: " + e.message]); }
+                setChecking(false);
+              }}>{checking ? "Checking…" : "Test connection"}</button>
+
+            {report && <div style={{ marginTop: 10, padding: 12, background: "#fafafa",
+              border: "1px solid var(--line)" }}>
+              {report.map((line, i) => <div key={i} style={{ fontSize: 13, marginBottom: 4 }}>{line}</div>)}
+            </div>}
+
             <div className="slate" style={{ marginTop: 10 }}>
               Last sync {ago(sync.at)}{sync.error ? " · " + sync.error : ""}</div>
           </div>
