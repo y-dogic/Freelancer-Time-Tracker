@@ -662,6 +662,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-09-01T11:38:28.128Z"
+    },
+    {
+      "id": "mtiuff1bt00966",
+      "itemId": "9riv2jvx",
+      "phase": "Revisions",
+      "deliverableId": "td57r4rm",
+      "minutes": 81,
+      "date": "2026-09-01",
+      "intensity": 3,
+      "note": "revision for the cut, mainly make the sueper graphic",
+      "updatedAt": "2026-09-01T15:49:56.831Z"
     }
   ],
   "settings": {
