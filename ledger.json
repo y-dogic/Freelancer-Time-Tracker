@@ -651,6 +651,17 @@
       "note": "phone call",
       "loggedAt": "2026-09-01T07:46:07.137Z",
       "updatedAt": "2026-09-01T07:46:07.137Z"
+    },
+    {
+      "id": "mtilg0iodfgi4u",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "06iyx90f",
+      "minutes": 90,
+      "date": "2026-09-01",
+      "intensity": 3,
+      "note": "",
+      "updatedAt": "2026-09-01T11:38:28.128Z"
     }
   ],
   "settings": {
