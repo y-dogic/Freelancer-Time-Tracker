@@ -673,6 +673,17 @@
       "intensity": 3,
       "note": "revision for the cut, mainly make the sueper graphic",
       "updatedAt": "2026-09-01T15:49:56.831Z"
+    },
+    {
+      "id": "mtjlo561awbpeh",
+      "itemId": "9riv2jvx",
+      "phase": "Revisions",
+      "deliverableId": "td57r4rm",
+      "minutes": 40,
+      "date": "2026-09-02",
+      "intensity": 3,
+      "note": "revision yesterday’s error",
+      "updatedAt": "2026-09-02T04:32:33.577Z"
     }
   ],
   "settings": {
