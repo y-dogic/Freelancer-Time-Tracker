@@ -684,6 +684,17 @@
       "intensity": 3,
       "note": "revision yesterday’s error",
       "updatedAt": "2026-09-02T04:32:33.577Z"
+    },
+    {
+      "id": "mtl0drrqkjxb4m",
+      "itemId": "adpd7ns6",
+      "phase": "Admin & invoicing",
+      "deliverableId": "4tyovlwo",
+      "minutes": 30,
+      "date": "2026-09-03",
+      "intensity": 2,
+      "note": "call with gov",
+      "updatedAt": "2026-09-03T04:12:10.070Z"
     }
   ],
   "settings": {
