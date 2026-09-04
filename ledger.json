@@ -706,6 +706,17 @@
       "intensity": 4,
       "note": "go to shatin to submit fee + uber $105",
       "updatedAt": "2026-09-04T11:34:16.232Z"
+    },
+    {
+      "id": "mtmvmti6bc7rek",
+      "itemId": "awfoq2t9",
+      "phase": "Other",
+      "deliverableId": "",
+      "minutes": 60,
+      "date": "2026-09-04",
+      "intensity": 2,
+      "note": "go to moko and no technician show up",
+      "updatedAt": "2026-09-04T11:34:46.494Z"
     }
   ],
   "settings": {
