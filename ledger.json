@@ -695,6 +695,17 @@
       "intensity": 2,
       "note": "call with gov",
       "updatedAt": "2026-09-03T04:12:10.070Z"
+    },
+    {
+      "id": "mtmvm65kd795mp",
+      "itemId": "adpd7ns6",
+      "phase": "Admin & invoicing",
+      "deliverableId": "jb1l5onn",
+      "minutes": 90,
+      "date": "2026-09-04",
+      "intensity": 4,
+      "note": "go to shatin to submit fee + uber $105",
+      "updatedAt": "2026-09-04T11:34:16.232Z"
     }
   ],
   "settings": {
