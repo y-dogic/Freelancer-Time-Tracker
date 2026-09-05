@@ -717,6 +717,17 @@
       "intensity": 2,
       "note": "go to moko and no technician show up",
       "updatedAt": "2026-09-04T11:34:46.494Z"
+    },
+    {
+      "id": "mtnw97rh29oyii",
+      "itemId": "adpd7ns6",
+      "phase": "Shoot",
+      "deliverableId": "4tyovlwo",
+      "minutes": 90,
+      "date": "2026-09-05",
+      "intensity": 3,
+      "note": "on site handling with LD",
+      "updatedAt": "2026-09-05T04:39:57.581Z"
     }
   ],
   "settings": {
