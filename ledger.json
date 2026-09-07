@@ -728,6 +728,17 @@
       "intensity": 3,
       "note": "on site handling with LD",
       "updatedAt": "2026-09-05T04:39:57.581Z"
+    },
+    {
+      "id": "mtqtq39qw2oe4w",
+      "itemId": "awfoq2t9",
+      "phase": "Recce & casting",
+      "deliverableId": "b08vcmky",
+      "minutes": 90,
+      "date": "2026-09-07",
+      "intensity": 3,
+      "note": "on site video testing",
+      "updatedAt": "2026-09-07T05:52:24.590Z"
     }
   ],
   "settings": {
