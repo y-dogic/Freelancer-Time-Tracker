@@ -739,6 +739,17 @@
       "intensity": 3,
       "note": "on site video testing",
       "updatedAt": "2026-09-07T05:52:24.590Z"
+    },
+    {
+      "id": "mtr64a6eio42jw",
+      "itemId": "nly1s44p",
+      "phase": "Admin & invoicing",
+      "deliverableId": "",
+      "minutes": 60,
+      "date": "2026-09-07",
+      "intensity": 3,
+      "note": "technical proposal and pricing proposal ",
+      "updatedAt": "2026-09-07T11:39:22.118Z"
     }
   ],
   "settings": {
