@@ -794,6 +794,17 @@
       "intensity": 3,
       "note": "communication with client",
       "updatedAt": "2026-09-08T13:11:58.395Z"
+    },
+    {
+      "id": "mtsv5k189zg4hl",
+      "itemId": "nly1s44p",
+      "phase": "Admin & invoicing",
+      "deliverableId": "g995suck",
+      "minutes": 42,
+      "date": "2026-09-08",
+      "intensity": 3,
+      "note": "tender submitted",
+      "updatedAt": "2026-09-08T16:07:58.124Z"
     }
   ],
   "settings": {
