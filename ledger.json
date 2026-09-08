@@ -783,6 +783,17 @@
       "intensity": 3,
       "note": "edit cut",
       "updatedAt": "2026-09-08T12:26:18.020Z"
+    },
+    {
+      "id": "mtsov83ffauono",
+      "itemId": "0mfdu7hq",
+      "phase": "Admin & invoicing",
+      "deliverableId": "f97s16yc",
+      "minutes": 30,
+      "date": "2026-09-08",
+      "intensity": 3,
+      "note": "communication with client",
+      "updatedAt": "2026-09-08T13:11:58.395Z"
     }
   ],
   "settings": {
