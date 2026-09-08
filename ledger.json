@@ -87,7 +87,7 @@
       "name": "HSTTA Video",
       "type": "paid",
       "clientId": "p0ln2yx8",
-      "fee": "10000",
+      "fee": "11400",
       "deliverables": [
         {
           "id": "jb1l5onn",
@@ -99,10 +99,10 @@
         }
       ],
       "bni": false,
-      "status": "active",
+      "status": "done",
       "id": "adpd7ns6",
       "createdAt": "2026-08-29T12:44:01.565Z",
-      "updatedAt": "2026-08-29T12:44:01.565Z"
+      "updatedAt": "2026-09-08T13:11:00.429Z"
     },
     {
       "name": "BNI",
