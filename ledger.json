@@ -772,6 +772,17 @@
       "intensity": 3,
       "note": "edit super ",
       "updatedAt": "2026-09-08T08:00:04.435Z"
+    },
+    {
+      "id": "mtsn8hlw0nk92s",
+      "itemId": "9riv2jvx",
+      "phase": "Revisions",
+      "deliverableId": "td57r4rm",
+      "minutes": 60,
+      "date": "2026-09-08",
+      "intensity": 3,
+      "note": "edit cut",
+      "updatedAt": "2026-09-08T12:26:18.020Z"
     }
   ],
   "settings": {
