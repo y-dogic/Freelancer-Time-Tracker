@@ -816,6 +816,17 @@
       "intensity": 3,
       "note": "ae revision ",
       "updatedAt": "2026-09-09T11:35:23.947Z"
+    },
+    {
+      "id": "mtwixs82yb2zj5",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 360,
+      "date": "2026-09-09",
+      "intensity": 3,
+      "note": "LT training + area lunch ",
+      "updatedAt": "2026-09-11T05:37:04.802Z"
     }
   ],
   "settings": {
