@@ -805,6 +805,17 @@
       "intensity": 3,
       "note": "tender submitted",
       "updatedAt": "2026-09-08T16:07:58.124Z"
+    },
+    {
+      "id": "mtu0uvqjs0wh16",
+      "itemId": "awfoq2t9",
+      "phase": "Revisions",
+      "deliverableId": "b08vcmky",
+      "minutes": 180,
+      "date": "2026-09-09",
+      "intensity": 3,
+      "note": "ae revision ",
+      "updatedAt": "2026-09-09T11:35:23.947Z"
     }
   ],
   "settings": {
