@@ -847,6 +847,17 @@
       "intensity": 3,
       "note": "LT training + area lunch ",
       "updatedAt": "2026-09-11T05:37:20.461Z"
+    },
+    {
+      "id": "mtz7o47ccjrm4c",
+      "itemId": "mtwiz8fgeaocyi",
+      "phase": "Storyboard & pre-pro",
+      "deliverableId": "mtwiyso3c7u6so",
+      "minutes": 15,
+      "date": "2026-09-13",
+      "intensity": 3,
+      "note": "find event reference video",
+      "updatedAt": "2026-09-13T02:44:56.520Z"
     }
   ],
   "settings": {
