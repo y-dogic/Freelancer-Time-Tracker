@@ -858,6 +858,17 @@
       "intensity": 3,
       "note": "find event reference video",
       "updatedAt": "2026-09-13T02:44:56.520Z"
+    },
+    {
+      "id": "mu0mlfcnfggu19",
+      "itemId": "adpd7ns6",
+      "phase": "Admin & invoicing",
+      "deliverableId": "4tyovlwo",
+      "minutes": 60,
+      "date": "2026-09-13",
+      "intensity": 3,
+      "note": "send copy of cef4 and 5 to Ld",
+      "updatedAt": "2026-09-14T02:30:31.415Z"
     }
   ],
   "settings": {
