@@ -902,6 +902,17 @@
       "intensity": 3,
       "note": "shooting at Hactl",
       "updatedAt": "2026-09-16T10:36:40.324Z"
+    },
+    {
+      "id": "mu5bj2575gt3fk",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 240,
+      "date": "2026-09-16",
+      "intensity": 3,
+      "note": "LT meeting",
+      "updatedAt": "2026-09-17T09:19:36.091Z"
     }
   ],
   "settings": {
