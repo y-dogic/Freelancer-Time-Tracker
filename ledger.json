@@ -924,6 +924,17 @@
       "intensity": 3,
       "note": "shooting at hactl ",
       "updatedAt": "2026-09-17T09:20:28.559Z"
+    },
+    {
+      "id": "mu71lgui2r77yc",
+      "itemId": "mtwiz8fgeaocyi",
+      "phase": "Shoot",
+      "deliverableId": "mtwiz0ryr5b4u1",
+      "minutes": 240,
+      "date": "2026-09-18",
+      "intensity": 3,
+      "note": "shooting at hactl",
+      "updatedAt": "2026-09-18T14:17:04.650Z"
     }
   ],
   "settings": {
