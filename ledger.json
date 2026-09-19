@@ -935,6 +935,17 @@
       "intensity": 3,
       "note": "shooting at hactl",
       "updatedAt": "2026-09-18T14:17:04.650Z"
+    },
+    {
+      "id": "mu8pxt8owpnfg8",
+      "itemId": "6hgl7men",
+      "phase": "Offline edit",
+      "deliverableId": "bctjay28",
+      "minutes": 60,
+      "date": "2026-09-19",
+      "intensity": 3,
+      "note": "make bod poster",
+      "updatedAt": "2026-09-19T18:26:17.544Z"
     }
   ],
   "settings": {
