@@ -946,6 +946,17 @@
       "intensity": 3,
       "note": "make bod poster",
       "updatedAt": "2026-09-19T18:26:17.544Z"
+    },
+    {
+      "id": "mu8py7zv3srpyk",
+      "itemId": "awfoq2t9",
+      "phase": "Offline edit",
+      "deliverableId": "b08vcmky",
+      "minutes": 60,
+      "date": "2026-09-19",
+      "intensity": 3,
+      "note": "make night version ",
+      "updatedAt": "2026-09-19T18:26:36.667Z"
     }
   ],
   "settings": {
