@@ -957,6 +957,17 @@
       "intensity": 3,
       "note": "make night version ",
       "updatedAt": "2026-09-19T18:26:36.667Z"
+    },
+    {
+      "id": "mu9d4g28vkd3ll",
+      "itemId": "awfoq2t9",
+      "phase": "Offline edit",
+      "deliverableId": "b08vcmky",
+      "minutes": 120,
+      "date": "2026-09-20",
+      "intensity": 3,
+      "note": "made 2 LED wall video",
+      "updatedAt": "2026-09-20T05:15:18.224Z"
     }
   ],
   "settings": {
