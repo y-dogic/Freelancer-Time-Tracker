@@ -1001,6 +1001,17 @@
       "intensity": 3,
       "note": "LT team building",
       "updatedAt": "2026-09-22T10:08:22.683Z"
+    },
+    {
+      "id": "mucjdsmy8q7gbm",
+      "itemId": "9riv2jvx",
+      "phase": "Offline edit",
+      "deliverableId": "td57r4rm",
+      "minutes": 18,
+      "date": "2026-09-22",
+      "intensity": 2,
+      "note": "revision",
+      "updatedAt": "2026-09-22T10:33:50.651Z"
     }
   ],
   "settings": {
