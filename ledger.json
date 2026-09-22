@@ -979,6 +979,17 @@
       "intensity": 3,
       "note": "make poster for BOD",
       "updatedAt": "2026-09-20T07:07:38.697Z"
+    },
+    {
+      "id": "mucigl6qmhwj3l",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "06iyx90f",
+      "minutes": 180,
+      "date": "2026-09-22",
+      "intensity": 3,
+      "note": "closed door",
+      "updatedAt": "2026-09-22T10:08:01.346Z"
     }
   ],
   "settings": {
