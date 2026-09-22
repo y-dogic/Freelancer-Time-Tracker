@@ -990,6 +990,17 @@
       "intensity": 3,
       "note": "closed door",
       "updatedAt": "2026-09-22T10:08:01.346Z"
+    },
+    {
+      "id": "mucih1nf2ic67j",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 180,
+      "date": "2026-09-22",
+      "intensity": 3,
+      "note": "LT team building",
+      "updatedAt": "2026-09-22T10:08:22.683Z"
     }
   ],
   "settings": {
