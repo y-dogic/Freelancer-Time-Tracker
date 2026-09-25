@@ -1012,6 +1012,17 @@
       "intensity": 2,
       "note": "revision",
       "updatedAt": "2026-09-22T10:33:50.651Z"
+    },
+    {
+      "id": "mugxhvgmhrfynn",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 180,
+      "date": "2026-09-24",
+      "intensity": 3,
+      "note": "kickoff rehearsal ",
+      "updatedAt": "2026-09-25T12:20:00.262Z"
     }
   ],
   "settings": {
