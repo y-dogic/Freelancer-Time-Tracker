@@ -846,7 +846,8 @@
       "date": "2026-09-09",
       "intensity": 3,
       "note": "LT training + area lunch ",
-      "updatedAt": "2026-09-11T05:37:20.461Z"
+      "updatedAt": "2026-09-27T19:58:55.792Z",
+      "deleted": true
     },
     {
       "id": "mtz7o47ccjrm4c",
@@ -1023,6 +1024,17 @@
       "intensity": 3,
       "note": "kickoff rehearsal ",
       "updatedAt": "2026-09-25T12:20:00.262Z"
+    },
+    {
+      "id": "muk8rog63ykugp",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 180,
+      "date": "2026-09-28",
+      "intensity": 3,
+      "note": "meeting and make ppt",
+      "updatedAt": "2026-09-27T19:58:52.038Z"
     }
   ],
   "settings": {
