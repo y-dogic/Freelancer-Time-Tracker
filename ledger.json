@@ -1046,6 +1046,17 @@
       "intensity": 3,
       "note": "Area LT training",
       "updatedAt": "2026-09-28T22:08:03.397Z"
+    },
+    {
+      "id": "mulsu4o7i15njy",
+      "itemId": "6hgl7men",
+      "phase": "Offline edit",
+      "deliverableId": "bctjay28",
+      "minutes": 180,
+      "date": "2026-09-28",
+      "intensity": 3,
+      "note": "webmaster kick off",
+      "updatedAt": "2026-09-28T22:08:24.871Z"
     }
   ],
   "settings": {
