@@ -1057,6 +1057,17 @@
       "intensity": 3,
       "note": "webmaster kick off",
       "updatedAt": "2026-09-28T22:08:24.871Z"
+    },
+    {
+      "id": "mulsujdzh1oi31",
+      "itemId": "awfoq2t9",
+      "phase": "Offline edit",
+      "deliverableId": "b08vcmky",
+      "minutes": 120,
+      "date": "2026-09-28",
+      "intensity": 3,
+      "note": "revision",
+      "updatedAt": "2026-09-28T22:08:43.943Z"
     }
   ],
   "settings": {
