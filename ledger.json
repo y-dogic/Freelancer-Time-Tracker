@@ -1035,6 +1035,17 @@
       "intensity": 3,
       "note": "meeting and make ppt",
       "updatedAt": "2026-09-27T19:58:52.038Z"
+    },
+    {
+      "id": "mulsto3pzw3fhy",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 180,
+      "date": "2026-09-28",
+      "intensity": 3,
+      "note": "Area LT training",
+      "updatedAt": "2026-09-28T22:08:03.397Z"
     }
   ],
   "settings": {
