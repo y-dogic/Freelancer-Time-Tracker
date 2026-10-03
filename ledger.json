@@ -189,6 +189,22 @@
       "status": "active",
       "id": "mury1do1swg6or",
       "updatedAt": "2026-10-03T05:20:38.257Z"
+    },
+    {
+      "name": "Hactl Safety Week",
+      "type": "paid",
+      "clientId": "frfwkgdl",
+      "fee": "",
+      "deliverables": [
+        {
+          "id": "mury2rjvn7h34f",
+          "name": "PA"
+        }
+      ],
+      "bni": false,
+      "status": "active",
+      "id": "mury30ny7fntt7",
+      "updatedAt": "2026-10-03T05:21:54.718Z"
     }
   ],
   "sessions": [
