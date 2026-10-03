@@ -29,6 +29,12 @@
       "name": "Ar Sang",
       "source": "Personal network",
       "updatedAt": "2026-09-01T11:37:09.694Z"
+    },
+    {
+      "id": "mury4wqbowz26a",
+      "name": "ViuTV",
+      "source": "Personal network",
+      "updatedAt": "2026-10-03T05:23:22.931Z"
     }
   ],
   "items": [
@@ -205,6 +211,22 @@
       "status": "active",
       "id": "mury30ny7fntt7",
       "updatedAt": "2026-10-03T05:21:54.718Z"
+    },
+    {
+      "name": "ViuTV LGBT Drone shooting",
+      "type": "paid",
+      "clientId": "mury4wqbowz26a",
+      "fee": "5000",
+      "deliverables": [
+        {
+          "id": "mury4pfy82bn4v",
+          "name": "Drone hooting"
+        }
+      ],
+      "bni": false,
+      "status": "active",
+      "id": "mury4wqb4stial",
+      "updatedAt": "2026-10-03T05:23:22.931Z"
     }
   ],
   "sessions": [
