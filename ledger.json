@@ -1152,6 +1152,17 @@
       "intensity": 3,
       "note": "handling invoice and insurance ",
       "updatedAt": "2026-10-03T05:23:47.806Z"
+    },
+    {
+      "id": "mv8ck8qcxfdrdk",
+      "itemId": "mury4wqb4stial",
+      "phase": "Shoot",
+      "deliverableId": "",
+      "minutes": 660,
+      "date": "2026-10-06",
+      "intensity": 3,
+      "note": "",
+      "updatedAt": "2026-10-14T16:51:31.764Z"
     }
   ],
   "settings": {
