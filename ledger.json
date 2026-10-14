@@ -35,6 +35,12 @@
       "name": "ViuTV",
       "source": "Personal network",
       "updatedAt": "2026-10-03T05:23:22.931Z"
+    },
+    {
+      "id": "mv8crcc1tbitct",
+      "name": "Roy Lam",
+      "source": "BNI referral",
+      "updatedAt": "2026-10-14T16:57:03.026Z"
     }
   ],
   "items": [
@@ -227,6 +233,17 @@
       "status": "done",
       "id": "mury4wqb4stial",
       "updatedAt": "2026-10-14T16:52:01.749Z"
+    },
+    {
+      "name": "VP Center",
+      "type": "paid",
+      "clientId": "mv8crcc1tbitct",
+      "fee": "",
+      "deliverables": [],
+      "bni": false,
+      "status": "active",
+      "id": "mv8crcc250fokk",
+      "updatedAt": "2026-10-14T16:57:03.026Z"
     }
   ],
   "sessions": [
