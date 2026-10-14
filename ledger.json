@@ -1163,6 +1163,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-10-14T16:51:31.764Z"
+    },
+    {
+      "id": "mv8cltilsw7xlv",
+      "itemId": "mury30ny7fntt7",
+      "phase": "Shoot",
+      "deliverableId": "mury2rjvn7h34f",
+      "minutes": 360,
+      "date": "2026-10-07",
+      "intensity": 3,
+      "note": "",
+      "updatedAt": "2026-10-14T16:52:45.357Z"
     }
   ],
   "settings": {
