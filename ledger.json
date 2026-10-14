@@ -41,6 +41,12 @@
       "name": "Roy Lam",
       "source": "BNI referral",
       "updatedAt": "2026-10-14T16:57:03.026Z"
+    },
+    {
+      "id": "mv8ctuux8tjia0",
+      "name": "Cafe de Carol",
+      "source": "BNI referral",
+      "updatedAt": "2026-10-14T16:59:00.346Z"
     }
   ],
   "items": [
@@ -255,6 +261,17 @@
       "status": "active",
       "id": "mv8cru1gpjd1yc",
       "updatedAt": "2026-10-14T16:57:25.972Z"
+    },
+    {
+      "name": "Cafe de Carol Spaghetti House",
+      "type": "pitch",
+      "clientId": "mv8ctuux8tjia0",
+      "fee": "",
+      "deliverables": [],
+      "bni": false,
+      "status": "active",
+      "id": "mv8ctuuyu94cn0",
+      "updatedAt": "2026-10-14T16:59:00.346Z"
     }
   ],
   "sessions": [
