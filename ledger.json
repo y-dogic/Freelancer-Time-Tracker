@@ -1296,6 +1296,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-10-14T16:57:47.725Z"
+    },
+    {
+      "id": "mv9ococaw9873i",
+      "itemId": "6hgl7men",
+      "phase": "Briefing & meetings",
+      "deliverableId": "bctjay28",
+      "minutes": 180,
+      "date": "2026-10-15",
+      "intensity": 3,
+      "note": "",
+      "updatedAt": "2026-10-15T15:09:20.314Z"
     }
   ],
   "settings": {
