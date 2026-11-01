@@ -272,6 +272,17 @@
       "status": "active",
       "id": "mv8ctuuyu94cn0",
       "updatedAt": "2026-10-14T16:59:00.346Z"
+    },
+    {
+      "name": "DCH",
+      "type": "pitch",
+      "clientId": "mv8crcc1tbitct",
+      "fee": "",
+      "deliverables": [],
+      "bni": false,
+      "status": "done",
+      "id": "mvxfqtd97yj6z1",
+      "updatedAt": "2026-11-01T06:14:51.693Z"
     }
   ],
   "sessions": [
