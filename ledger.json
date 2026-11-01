@@ -1329,6 +1329,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-11-01T06:14:17.128Z"
+    },
+    {
+      "id": "mvxfrn3zch33f9",
+      "itemId": "mvxfqtd97yj6z1",
+      "phase": "Briefing & meetings",
+      "deliverableId": "",
+      "minutes": 480,
+      "date": "2026-10-29",
+      "intensity": 3,
+      "note": "pitching at DCH",
+      "updatedAt": "2026-11-01T06:15:30.239Z"
     }
   ],
   "settings": {
