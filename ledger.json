@@ -1307,6 +1307,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-10-15T15:09:30.699Z"
+    },
+    {
+      "id": "mvxfq2p4sujlti",
+      "itemId": "awfoq2t9",
+      "phase": "Revisions",
+      "deliverableId": "b08vcmky",
+      "minutes": 180,
+      "date": "2026-10-30",
+      "intensity": 3,
+      "note": "",
+      "updatedAt": "2026-11-01T06:14:17.128Z"
     }
   ],
   "settings": {
