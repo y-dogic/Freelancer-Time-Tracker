@@ -47,6 +47,12 @@
       "name": "Cafe de Carol",
       "source": "BNI referral",
       "updatedAt": "2026-10-14T16:59:00.346Z"
+    },
+    {
+      "id": "mvzk595qounycf",
+      "name": "Ivan Yam Social media",
+      "source": "BNI referral",
+      "updatedAt": "2026-11-02T17:53:36.159Z"
     }
   ],
   "items": [
@@ -283,6 +289,17 @@
       "status": "done",
       "id": "mvxfqtd97yj6z1",
       "updatedAt": "2026-11-01T06:14:51.693Z"
+    },
+    {
+      "name": "Ivan Pitching",
+      "type": "pitch",
+      "clientId": "mvzk595qounycf",
+      "fee": "",
+      "deliverables": [],
+      "bni": false,
+      "status": "active",
+      "id": "mvzk595r1tz4fb",
+      "updatedAt": "2026-11-02T17:53:36.159Z"
     }
   ],
   "sessions": [
