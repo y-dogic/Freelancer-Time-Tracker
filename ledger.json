@@ -250,12 +250,12 @@
       "name": "VP Center",
       "type": "paid",
       "clientId": "mv8crcc1tbitct",
-      "fee": "",
+      "fee": "3000",
       "deliverables": [],
       "bni": false,
       "status": "active",
       "id": "mv8crcc250fokk",
-      "updatedAt": "2026-10-14T16:57:03.026Z"
+      "updatedAt": "2026-11-05T04:35:56.502Z"
     },
     {
       "name": "loreal Andy lau",
