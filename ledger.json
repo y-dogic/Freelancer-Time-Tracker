@@ -1412,6 +1412,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-11-05T04:38:04.384Z"
+    },
+    {
+      "id": "mw322e4qdqjnka",
+      "itemId": "mvzk595r1tz4fb",
+      "phase": "Briefing & meetings",
+      "deliverableId": "",
+      "minutes": 240,
+      "date": "2026-11-03",
+      "intensity": 3,
+      "note": "",
+      "updatedAt": "2026-11-05T04:38:34.250Z"
     }
   ],
   "settings": {
