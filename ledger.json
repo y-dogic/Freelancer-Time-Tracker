@@ -1368,6 +1368,17 @@
       "intensity": 3,
       "note": "pitching ",
       "updatedAt": "2026-11-05T04:30:51.475Z"
+    },
+    {
+      "id": "mw31zwsfrw9oa7",
+      "itemId": "mv8ctuuyu94cn0",
+      "phase": "Briefing & meetings",
+      "deliverableId": "",
+      "minutes": 360,
+      "date": "2026-10-29",
+      "intensity": 3,
+      "note": "pitching",
+      "updatedAt": "2026-11-05T04:36:38.463Z"
     }
   ],
   "settings": {
