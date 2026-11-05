@@ -1445,6 +1445,17 @@
       "intensity": 3,
       "note": "video test",
       "updatedAt": "2026-11-05T04:38:44.329Z"
+    },
+    {
+      "id": "mw32yyqmxw9ll1",
+      "itemId": "mw32yeqq8r9gck",
+      "phase": "Recce & casting",
+      "deliverableId": "",
+      "minutes": 180,
+      "date": "2026-11-03",
+      "intensity": 3,
+      "note": "location search ",
+      "updatedAt": "2026-11-05T05:03:53.950Z"
     }
   ],
   "settings": {
