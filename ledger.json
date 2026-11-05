@@ -292,14 +292,14 @@
     },
     {
       "name": "Ivan Pitching",
-      "type": "pitch",
+      "type": "paid",
       "clientId": "mvzk595qounycf",
-      "fee": "",
+      "fee": "4800",
       "deliverables": [],
       "bni": false,
       "status": "active",
       "id": "mvzk595r1tz4fb",
-      "updatedAt": "2026-11-02T17:53:36.159Z"
+      "updatedAt": "2026-11-05T04:39:03.676Z"
     }
   ],
   "sessions": [
