@@ -1423,6 +1423,17 @@
       "intensity": 3,
       "note": "",
       "updatedAt": "2026-11-05T04:38:34.250Z"
+    },
+    {
+      "id": "mw322lwp8f122e",
+      "itemId": "mvzk595r1tz4fb",
+      "phase": "Briefing & meetings",
+      "deliverableId": "",
+      "minutes": 180,
+      "date": "2026-11-05",
+      "intensity": 3,
+      "note": "video test",
+      "updatedAt": "2026-11-05T04:38:44.329Z"
     }
   ],
   "settings": {
